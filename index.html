@@ -64,18 +64,18 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label fw-bold small text-uppercase text-danger">Current Date</label>
+                                    <label class="form-label fw-bold small text-uppercase text-danger">Date</label>
                                     <input type="text" id="incidentDate" class="form-control" readonly>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label fw-bold small text-uppercase text-danger">Current Time</label>
+                                    <label class="form-label fw-bold small text-uppercase text-danger">Time</label>
                                     <input type="text" id="incidentTime" class="form-control" readonly>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold small text-uppercase">Incident Description</label>
-                                <textarea id="description" class="form-control" rows="5" placeholder="Provide complete details of what happened..." required></textarea>
+                                <textarea id="description" class="form-control" rows="5" placeholder="Provide complete details..." required></textarea>
                             </div>
 
                             <button type="submit" id="btnSubmit" class="btn btn-dark w-100 py-3 fw-bold shadow-sm">
@@ -108,8 +108,8 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        // SIGURADUHIN NA ETO ANG URL MULA SA 'MANAGE DEPLOYMENTS' NG APPS SCRIPT
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyRch2uWVVCYAcwnnFs7vpvKYjZA0aiRfdtqiYDMlErvZRTMd53Qc7JBt2bBTWl9Jug/exec"; 
+        // HETO ANG BAGO MONG SCRIPT URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxfWHUwefqvAFU4C3A3oYOUxsIKEauuAbqZlnn69NARNEeZFrlUyQvOVLk6P96C0ma6/exec"; 
 
         // --- REAL-TIME CLOCK & AUTO-FILL ---
         function updateClock() {
@@ -119,7 +119,6 @@
             
             document.getElementById('liveClock').innerText = now.toLocaleString('en-US', { ...dateOptions, ...timeOptions });
             
-            // Auto-fill form fields
             document.getElementById('incidentDate').value = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
             document.getElementById('incidentTime').value = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
         }
@@ -141,7 +140,7 @@
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>SENDING REPORT...';
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>SENDING...';
 
             const payload = {
                 fullname: document.getElementById('fullname').value,
@@ -159,12 +158,12 @@
                 // 2. Send via Google Script (Email)
                 await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
                 
-                alert("SUCCESS! Report has been saved and sent to management.");
+                alert("SUCCESS! Report saved and email notification sent.");
                 form.reset();
-                updateClock(); // I-reset ang clock values pagkatapos ng reset
+                updateClock();
             } catch (err) {
                 console.error(err);
-                alert("SUBMISSION ERROR: Please check your internet or Firebase permissions.");
+                alert("SUBMISSION ERROR: Check internet or script permissions.");
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="bi bi-send-check-fill me-2"></i>SUBMIT INCIDENT REPORT';
