@@ -3,94 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Incident Report - iMerch Media</title>
+    <title>iMerch IR System - Ronsanity</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
-        body { 
-            background-color: #f8f9fa; 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-        .logo-container { 
-            text-align: center; 
-            margin: 40px 0 20px 0; 
-        }
-        .company-logo { 
-            max-width: 280px; 
-            height: auto; 
-            /* Optional: Nagdagdag ako ng kaunting shadow sa logo para mas litaw */
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.05));
-        }
-        .card { 
-            border-radius: 10px; 
-            border: none; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-        }
-        .card-header { 
-            background-color: #000 !important; 
-            color: white; 
-            text-align: center;
-            border-radius: 10px 10px 0 0 !important;
-            padding: 15px;
-        }
-        .btn-dark {
-            background-color: #000;
-            border: none;
-            transition: all 0.3s ease;
-        }
-        .btn-dark:hover {
-            background-color: #333;
-            transform: translateY(-1px);
-        }
-        label {
-            color: #333;
-        }
+        :root { --bg: #f4f7f6; --card-bg: #ffffff; --text: #000000; }
+        [data-bs-theme="dark"] { --bg: #121212; --card-bg: #1e1e1e; --text: #ffffff; }
+
+        body { background-color: var(--bg); color: var(--text); transition: all 0.3s ease; }
+        .logo-container { text-align: center; margin: 20px 0; }
+        .company-logo { max-width: 220px; height: auto; }
+        .card { background-color: var(--card-bg); border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .card-header { background-color: #000 !important; color: #fff; border-radius: 15px 15px 0 0 !important; }
+        #liveClock { font-weight: bold; color: #d32f2f; font-size: 1.1rem; }
+        .theme-switch { position: fixed; top: 20px; right: 20px; z-index: 1000; }
     </style>
 </head>
-<body>
+<body data-bs-theme="light">
+
+    <div class="theme-switch">
+        <button class="btn btn-outline-dark rounded-circle" id="themeToggle">
+            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+        </button>
+    </div>
 
     <div class="container mb-5">
         <div class="logo-container">
             <img src="https://i.ibb.co/Xz9tH4Z/image-0.png" alt="iMerch Logo" class="company-logo">
+            <div id="liveClock" class="mt-2">Loading time...</div>
         </div>
 
         <div class="row justify-content-center">
             <div class="col-md-7">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0 fw-bold text-uppercase" style="letter-spacing: 1px;">Incident Report Form</h5>
+                <div class="card shadow border-0">
+                    <div class="card-header p-3 text-center">
+                        <h5 class="mb-0 fw-bold">INCIDENT REPORT FORM</h5>
                     </div>
                     <div class="card-body p-4">
                         <form id="incidentForm">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Full Name</label>
-                                <input type="text" id="fullname" class="form-control" placeholder="Enter reporter's name" required>
+                                <input type="text" id="fullname" class="form-control" placeholder="Reporter's name" required>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Date</label>
-                                    <input type="date" id="incidentDate" class="form-control" required>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Reported via:</label>
+                                    <select id="reportSource" class="form-select" required>
+                                        <option value="Web App (PC/Laptop)">Web App (PC/Laptop)</option>
+                                        <option value="Mobile Phone">Mobile Phone</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Time</label>
-                                    <input type="time" id="incidentTime" class="form-control" required>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Coordinator</label>
+                                    <input type="text" id="coordinator" class="form-control" placeholder="PIC" required>
                                 </div>
                             </div>
+
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Coordinator Name</label>
-                                <input type="text" id="coordinator" class="form-control" placeholder="Name of person-in-charge" required>
+                                <label class="form-label fw-bold">Incident Description</label>
+                                <textarea id="description" class="form-control" rows="4" placeholder="Describe the incident..." required></textarea>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Description of Incident</label>
-                                <textarea id="description" class="form-control" rows="5" placeholder="Provide details of what happened..." required></textarea>
-                            </div>
-                            <button type="submit" id="btnSubmit" class="btn btn-dark w-100 fw-bold py-2">SUBMIT REPORT</button>
+
+                            <input type="hidden" id="incidentDate">
+                            <input type="hidden" id="incidentTime">
+
+                            <button type="submit" id="btnSubmit" class="btn btn-dark w-100 py-2 fw-bold">SUBMIT REPORT</button>
                         </form>
                     </div>
                 </div>
-                <p class="text-center mt-4 text-muted" style="font-size: 0.8rem;">
-                    &copy; 2026 iMerch Media Inc. | Developed by Ronsanity
-                </p>
+                <p class="text-center mt-3 text-muted small">&copy; 2026 iMerch Media | Developed by Ronsanity</p>
             </div>
         </div>
     </div>
@@ -113,16 +96,47 @@
         const db = getFirestore(app);
         const scriptURL = "https://script.google.com/macros/s/AKfycbyRch2uWVVCYAcwnnFs7vpvKYjZA0aiRfdtqiYDMlErvZRTMd53Qc7JBt2bBTWl9Jug/exec"; 
 
-        const form = document.getElementById('incidentForm');
-        const btnSubmit = document.getElementById('btnSubmit');
+        // --- REAL-TIME CLOCK LOGIC ---
+        function updateTime() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('liveClock').innerText = `${dateStr} | ${timeStr}`;
+            
+            // Auto-fill hidden fields for report
+            document.getElementById('incidentDate').value = now.toISOString().split('T')[0];
+            document.getElementById('incidentTime').value = timeStr;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
 
+        // --- DARK/LIGHT MODE LOGIC ---
+        const themeBtn = document.getElementById('themeToggle');
+        themeBtn.addEventListener('click', () => {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            if(body.getAttribute('data-bs-theme') === 'light') {
+                body.setAttribute('data-bs-theme', 'dark');
+                icon.className = 'bi bi-sun-fill';
+                themeBtn.className = 'btn btn-outline-light rounded-circle';
+            } else {
+                body.setAttribute('data-bs-theme', 'light');
+                icon.className = 'bi bi-moon-stars-fill';
+                themeBtn.className = 'btn btn-outline-dark rounded-circle';
+            }
+        });
+
+        // --- FORM SUBMISSION ---
+        const form = document.getElementById('incidentForm');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Processing...";
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.innerText = "Sending...";
 
             const reportData = {
                 fullname: document.getElementById('fullname').value,
+                source: document.getElementById('reportSource').value,
                 date: document.getElementById('incidentDate').value,
                 time: document.getElementById('incidentTime').value,
                 coordinator: document.getElementById('coordinator').value,
@@ -130,20 +144,16 @@
             };
 
             try {
-                // Save sa Firebase
                 await addDoc(collection(db, "incidents"), { ...reportData, createdAt: serverTimestamp() });
-                
-                // Send Email via Google Apps Script
                 await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(reportData) });
-                
-                alert("Success! Incident report has been saved and sent to imerch.ir@imerchmedia.net");
+                alert("Success! Sent to imerch.ir@imerchmedia.net");
                 form.reset();
-            } catch (error) {
-                console.error(error);
-                alert("Error submitting report. Please check your connection.");
+            } catch (err) {
+                console.error(err);
+                alert("Error submitting report.");
             } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "SUBMIT REPORT";
+                btn.disabled = false;
+                btn.innerText = "SUBMIT REPORT";
             }
         });
     </script>
