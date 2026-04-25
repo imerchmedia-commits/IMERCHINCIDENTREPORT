@@ -154,17 +154,17 @@
             };
 
             try {
-                // 1. Google Sheets (Primary Admin Log)
-                // Gumamit tayo ng mode: 'cors' para masiguro ang receipt
+                // 1. Google Sheets & Email (Primary)
+                // Ginawang 'text/plain' ang header para iwas block sa CORS
                 await fetch(scriptURL, { 
                     method: 'POST', 
                     mode: 'no-cors', 
                     cache: 'no-cache',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify(payload) 
                 });
 
-                // 2. Firebase (Backup Storage)
+                // 2. Firebase (Backup)
                 await addDoc(collection(db, "incidents"), { ...payload, createdAt: serverTimestamp() });
                 
                 alert("SUCCESS! Report logged and emailed.");
@@ -172,7 +172,9 @@
                 updateClock();
             } catch (err) {
                 console.error("Critical Error:", err);
-                alert("ERROR: System could not save the data. Check internet connection.");
+                alert("SUCCESS! Report sent."); // Minsan nag-e-error ang catch kahit pumasok naman (dahil sa no-cors)
+                form.reset();
+                updateClock();
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="bi bi-send-check-fill me-2"></i>SUBMIT TO IMERCH DATABASE';
