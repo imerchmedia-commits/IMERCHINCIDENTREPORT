@@ -12,14 +12,14 @@
         [data-bs-theme="dark"] { --bg: #121212; --card-bg: #1e1e1e; --text: #f8f9fa; --input-bg: #2b3035; }
 
         body { background-color: var(--bg); color: var(--text); transition: 0.3s; font-family: 'Segoe UI', sans-serif; }
-        .logo-container { text-align: center; margin: 30px 0; }
-        .company-logo { max-width: 200px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        .card { background-color: var(--card-bg); border: none; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+        .logo-container { text-align: center; margin: 30px 0 15px 0; }
+        .company-logo { max-width: 220px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .card { background-color: var(--card-bg); border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
         .card-header { background-color: #000 !important; color: #fff; border-radius: 15px 15px 0 0 !important; padding: 1.2rem; }
-        #liveClock { font-weight: 700; color: #dc3545; font-size: 1.1rem; text-transform: uppercase; }
+        #liveClock { font-weight: 800; color: #dc3545; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
         .theme-switch { position: fixed; top: 20px; right: 20px; z-index: 1000; }
-        .form-control, .form-select { background-color: var(--input-bg); color: var(--text); border: 1px solid #ced4da; }
-        [data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select { border: 1px solid #444; color: #fff; }
+        .form-control:read-only { background-color: #e9ecef; opacity: 0.8; font-weight: bold; }
+        [data-bs-theme="dark"] .form-control:read-only { background-color: #343a40; color: #ffc107; }
     </style>
 </head>
 <body data-bs-theme="light">
@@ -33,53 +33,61 @@
     <div class="container mb-5">
         <div class="logo-container">
             <img src="https://i.ibb.co/Xz9tH4Z/image-0.png" alt="iMerch Logo" class="company-logo">
-            <div id="liveClock" class="mt-2">Loading System Time...</div>
+            <div id="liveClock" class="mt-2">LOADING SYSTEM TIME...</div>
         </div>
 
         <div class="row justify-content-center">
-            <div class="col-md-7">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h5 class="mb-0 fw-bold" style="letter-spacing: 1.5px;">INCIDENT REPORT FORM</h5>
+                        <h5 class="mb-0 fw-bold" style="letter-spacing: 2px;">INCIDENT REPORT FORM</h5>
                     </div>
                     <div class="card-body p-4">
                         <form id="incidentForm">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Full Name of Reporter</label>
-                                <input type="text" id="fullname" class="form-control" placeholder="Enter your full name" required>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold small text-uppercase">Full Name of Reporter</label>
+                                    <input type="text" id="fullname" class="form-control" placeholder="Enter your name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold small text-uppercase">Coordinator</label>
+                                    <input type="text" id="coordinator" class="form-control" placeholder="Name of PIC" required>
+                                </div>
                             </div>
 
                             <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Reported via:</label>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold small text-uppercase">Reported via:</label>
                                     <select id="reportSource" class="form-select" required>
-                                        <option value="Mobile Phone">Mobile Phone</option>
                                         <option value="Web App (PC/Laptop)">Web App (PC/Laptop)</option>
+                                        <option value="Mobile Phone">Mobile Phone</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Coordinator</label>
-                                    <input type="text" id="coordinator" class="form-control" placeholder="PIC Name" required>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold small text-uppercase text-danger">Current Date</label>
+                                    <input type="text" id="incidentDate" class="form-control" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold small text-uppercase text-danger">Current Time</label>
+                                    <input type="text" id="incidentTime" class="form-control" readonly>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Incident Description</label>
-                                <textarea id="description" class="form-control" rows="5" placeholder="Details of the incident..." required></textarea>
+                                <label class="form-label fw-bold small text-uppercase">Incident Description</label>
+                                <textarea id="description" class="form-control" rows="5" placeholder="Provide complete details of what happened..." required></textarea>
                             </div>
 
-                            <input type="hidden" id="incidentDate">
-                            <input type="hidden" id="incidentTime">
-
-                            <button type="submit" id="btnSubmit" class="btn btn-dark w-100 py-2 fw-bold mt-2">
-                                <i class="bi bi-send-fill me-2"></i>SUBMIT REPORT
+                            <button type="submit" id="btnSubmit" class="btn btn-dark w-100 py-3 fw-bold shadow-sm">
+                                <i class="bi bi-send-check-fill me-2"></i>SUBMIT INCIDENT REPORT
                             </button>
                         </form>
                     </div>
                 </div>
-                <p class="text-center mt-4 text-muted small">
-                    &copy; 2026 iMerch Media Inc. | <span class="fw-bold">Ronsanity</span> Security Module
-                </p>
+                <div class="text-center mt-4">
+                    <p class="text-muted small mb-0">&copy; 2026 iMerch Media Inc. | Internal Security System</p>
+                    <p class="fw-bold small text-dark mt-1">Developed by Ronsanity</p>
+                </div>
             </div>
         </div>
     </div>
@@ -100,22 +108,25 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        // ILAGAY DITO ANG PINAKABAGONG URL MULA SA GOOGLE APPS SCRIPT DEPLOYMENT
+        // SIGURADUHIN NA ETO ANG URL MULA SA 'MANAGE DEPLOYMENTS' NG APPS SCRIPT
         const scriptURL = "https://script.google.com/macros/s/AKfycbyRch2uWVVCYAcwnnFs7vpvKYjZA0aiRfdtqiYDMlErvZRTMd53Qc7JBt2bBTWl9Jug/exec"; 
 
-        // --- REAL-TIME CLOCK ---
+        // --- REAL-TIME CLOCK & AUTO-FILL ---
         function updateClock() {
             const now = new Date();
-            const options = { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            document.getElementById('liveClock').innerText = now.toLocaleString('en-US', options);
+            const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             
-            document.getElementById('incidentDate').value = now.toLocaleDateString();
-            document.getElementById('incidentTime').value = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+            document.getElementById('liveClock').innerText = now.toLocaleString('en-US', { ...dateOptions, ...timeOptions });
+            
+            // Auto-fill form fields
+            document.getElementById('incidentDate').value = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+            document.getElementById('incidentTime').value = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- THEME TOGGLE ---
+        // --- THEME SWITCHER ---
         const themeBtn = document.getElementById('themeToggle');
         themeBtn.addEventListener('click', () => {
             const isLight = document.body.getAttribute('data-bs-theme') === 'light';
@@ -124,13 +135,13 @@
             themeBtn.className = isLight ? 'btn btn-outline-light rounded-circle' : 'btn btn-outline-dark rounded-circle';
         });
 
-        // --- SUBMISSION ---
+        // --- FORM SUBMISSION ---
         const form = document.getElementById('incidentForm');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Sending...';
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>SENDING REPORT...';
 
             const payload = {
                 fullname: document.getElementById('fullname').value,
@@ -145,17 +156,18 @@
                 // 1. Save sa Firebase
                 await addDoc(collection(db, "incidents"), { ...payload, createdAt: serverTimestamp() });
                 
-                // 2. Trigger Google Script Email
+                // 2. Send via Google Script (Email)
                 await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
                 
-                alert("SUCCESS: Report saved and email sent to imerch.ir@imerchmedia.net");
+                alert("SUCCESS! Report has been saved and sent to management.");
                 form.reset();
+                updateClock(); // I-reset ang clock values pagkatapos ng reset
             } catch (err) {
                 console.error(err);
-                alert("ERROR: System encountered a problem. Check console for details.");
+                alert("SUBMISSION ERROR: Please check your internet or Firebase permissions.");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-send-fill me-2"></i>SUBMIT REPORT';
+                btn.innerHTML = '<i class="bi bi-send-check-fill me-2"></i>SUBMIT INCIDENT REPORT';
             }
         });
     </script>
