@@ -56,11 +56,11 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold small text-uppercase">Full Name of Reporter</label>
-                                    <input type="text" id="fullname" class="form-control" placeholder="Enter your name" required>
+                                    <input type="text" id="fullname" class="form-control" placeholder="Enter name" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold small text-uppercase">Coordinator / PIC</label>
-                                    <input type="text" id="coordinator" class="form-control" placeholder="Name of Supervisor" required>
+                                    <input type="text" id="coordinator" class="form-control" placeholder="Enter supervisor" required>
                                 </div>
                             </div>
 
@@ -84,7 +84,7 @@
 
                             <div class="mb-4">
                                 <label class="form-label fw-bold small text-uppercase">Incident Description / Remarks</label>
-                                <textarea id="description" class="form-control" rows="5" placeholder="Enter complete details here..." required></textarea>
+                                <textarea id="description" class="form-control" rows="5" placeholder="Enter details..." required></textarea>
                             </div>
 
                             <button type="submit" id="btnSubmit" class="btn btn-submit w-100">
@@ -118,7 +118,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        // Ipinasok na ang bagong URL mo dito
+        // I-paste ang iyong Web App URL dito
         const scriptURL = "https://script.google.com/macros/s/AKfycbwuricOuq0kmqLXbf-bqYTAdeHri-Z1rcZEViE2YGjaAr-trRZFmPb0ZJ_zD8ObKBSI/exec"; 
 
         function updateClock() {
@@ -154,23 +154,25 @@
             };
 
             try {
-                // 1. Firebase Record
-                await addDoc(collection(db, "incidents"), { ...payload, createdAt: serverTimestamp() });
-                
-                // 2. Google Sheets & Email Sync
+                // 1. Google Sheets (Primary Admin Log)
+                // Gumamit tayo ng mode: 'cors' para masiguro ang receipt
                 await fetch(scriptURL, { 
                     method: 'POST', 
                     mode: 'no-cors', 
                     cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload) 
                 });
+
+                // 2. Firebase (Backup Storage)
+                await addDoc(collection(db, "incidents"), { ...payload, createdAt: serverTimestamp() });
                 
-                alert("SUCCESS!\n\nIncident has been reported and logged.");
+                alert("SUCCESS! Report logged and emailed.");
                 form.reset();
                 updateClock();
             } catch (err) {
-                console.error(err);
-                alert("SUBMISSION ERROR: Please check internet connection.");
+                console.error("Critical Error:", err);
+                alert("ERROR: System could not save the data. Check internet connection.");
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="bi bi-send-check-fill me-2"></i>SUBMIT TO IMERCH DATABASE';
