@@ -15,6 +15,7 @@
         .card-header { background: #000 !important; color: #fff; border-radius: 15px 15px 0 0 !important; }
         #liveClock { font-weight: 800; color: #dc3545; }
         .btn-submit { background: #000; color: #fff; font-weight: bold; padding: 12px; border-radius: 8px; }
+        .file-info { font-size: 0.75rem; color: #6c757d; }
     </style>
 </head>
 <body data-bs-theme="light">
@@ -52,10 +53,17 @@
                                 <div class="col-md-4"><label class="form-label fw-bold small text-danger">DATE</label><input type="text" id="date" class="form-control" readonly></div>
                                 <div class="col-md-4"><label class="form-label fw-bold small text-danger">TIME</label><input type="text" id="time" class="form-control" readonly></div>
                             </div>
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <label class="form-label fw-bold small">DESCRIPTION / REMARKS</label>
                                 <textarea id="description" class="form-control" rows="4" required></textarea>
                             </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-bold small text-primary"><i class="bi bi-paperclip"></i> ATTACH DOCUMENT (PDF, WORD, IMAGE)</label>
+                                <input type="file" id="attachment" class="form-control form-control-sm" accept=".pdf,.doc,.docx,image/*">
+                                <div class="file-info mt-1">Maximum file size: 5MB</div>
+                            </div>
+
                             <button type="submit" id="submitBtn" class="btn btn-submit w-100">SUBMIT TO DATABASE</button>
                         </form>
                     </div>
@@ -66,7 +74,6 @@
     </div>
 
     <script>
-        // BAGONG WEB APP URL
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwuricOuq0kmqLXbf-bqYTAdeHri-Z1rcZEViE2YGjaAr-trRZFmPb0ZJ_zD8ObKBSI/exec';
 
         function updateTime() {
@@ -77,11 +84,42 @@
         }
         setInterval(updateTime, 1000); updateTime();
 
-        document.getElementById('incidentForm').addEventListener('submit', function(e) {
+        // Helper function para gawing Base64 ang file
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        document.getElementById('incidentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
+            const fileInput = document.getElementById('attachment');
+            
             btn.disabled = true;
             btn.innerText = "PROCESSING REPORT...";
+
+            let fileData = null;
+
+            // I-process ang file kung meron
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit check
+                    alert("File is too large. Maximum size is 5MB.");
+                    btn.disabled = false;
+                    btn.innerText = "SUBMIT TO DATABASE";
+                    return;
+                }
+                const base64String = await getBase64(file);
+                fileData = {
+                    base64: base64String.split(',')[1],
+                    type: file.type,
+                    name: file.name
+                };
+            }
 
             const formData = {
                 fullname: document.getElementById('fullname').value,
@@ -89,10 +127,10 @@
                 source: document.getElementById('source').value,
                 date: document.getElementById('date').value,
                 time: document.getElementById('time').value,
-                description: document.getElementById('description').value
+                description: document.getElementById('description').value,
+                attachment: fileData // Isasama na ang file info
             };
 
-            // Mas reliable na paraan para sa Google Script
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -101,13 +139,13 @@
                 body: JSON.stringify(formData)
             })
             .then(() => {
-                alert("SUCCESS: Report has been submitted!");
+                alert("SUCCESS: Report has been submitted with attachment!");
                 document.getElementById('incidentForm').reset();
                 updateTime();
             })
             .catch(error => {
                 console.error('Error!', error.message);
-                alert("SUCCESS: Check your sheet and email."); // Fallback alert
+                alert("An error occurred, but please check your email/sheet.");
             })
             .finally(() => {
                 btn.disabled = false;
