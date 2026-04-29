@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iMerch Incident Report Portal</title>
-    <link rel="icon" href="https://imerchmedia.ph/wp-content/uploads/2021/08/cropped-imerch-logo-32x32.png" sizes="32x32">
+    <link rel="icon" href="incident.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -14,6 +14,18 @@
             --accent-color: #ff914d;
             --bg-color: #f0f2f5;
             --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-sub: #666666;
+            --border-color: #e1e1e1;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-main: #ffffff;
+            --text-sub: #bbbbbb;
+            --border-color: #444444;
+            --secondary-color: #4da3ff;
         }
 
         body {
@@ -25,6 +37,7 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            transition: background 0.3s ease;
         }
 
         .container {
@@ -36,6 +49,7 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
+            transition: background 0.3s ease;
         }
 
         .container::before {
@@ -66,9 +80,17 @@
         }
 
         p.subtitle {
-            color: #666;
+            color: var(--text-sub);
             font-size: 0.9rem;
             margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        #realtime-clock {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 15px;
         }
 
         .form-group {
@@ -80,7 +102,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: var(--secondary-color);
+            color: var(--text-main);
             font-size: 0.9rem;
         }
 
@@ -100,10 +122,12 @@
         input, select, textarea {
             width: 100%;
             padding: 12px 15px 12px 45px;
-            border: 2px solid #e1e1e1;
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             font-size: 1rem;
             font-family: inherit;
+            background: var(--card-bg);
+            color: var(--text-main);
             transition: all 0.3s ease;
             box-sizing: border-box;
         }
@@ -113,23 +137,14 @@
             resize: vertical;
         }
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(0, 74, 173, 0.1);
-        }
-
         .date-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
 
-        /* Responsive for mobile */
         @media (max-width: 480px) {
-            .date-row {
-                grid-template-columns: 1fr;
-            }
+            .date-row { grid-template-columns: 1fr; }
         }
 
         .btn-submit {
@@ -147,149 +162,184 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            margin-top: 10px;
         }
 
-        .btn-submit:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 74, 173, 0.3);
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
         }
 
-        .btn-submit:active {
-            transform: translateY(0);
+        .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
         }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .footer-text {
             text-align: center;
             margin-top: 25px;
             font-size: 0.8rem;
-            color: #888;
-        }
-
-        /* Success/Error States */
-        .loader {
-            display: none;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            color: var(--text-sub);
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-<div class="container">
-    <div class="logo-section">
-        <img src="imerch.png" alt="iMerch Logo">
-        <h2>Incident Report Portal</h2>
-        <p class="subtitle">Ensuring Excellence through Accountability</p>
-    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
 
-    <form id="incidentForm">
-        <div class="form-group">
-            <label>Reporter Name</label>
-            <div class="input-with-icon">
-                <i class="fas fa-user"></i>
-                <input type="text" name="reporterName" placeholder="Enter your full name" required>
-            </div>
+    <div class="container">
+        <div class="logo-section">
+            <img src="imerch.png" alt="iMerch Logo">
+            <h2>Incident Report Portal</h2>
+            <p class="subtitle">Ensuring Excellence through Accountability</p>
+            <div id="realtime-clock">Loading...</div>
         </div>
 
-        <div class="date-row">
+        <form id="incidentForm">
             <div class="form-group">
-                <label>Date Reported</label>
+                <label>Reporter Name</label>
                 <div class="input-with-icon">
-                    <i class="fas fa-calendar-check"></i>
-                    <input type="date" id="reportDate" name="reportDate" required>
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="fullname" placeholder="Enter your full name" required>
+                </div>
+            </div>
+
+            <div class="date-row">
+                <div class="form-group">
+                    <label>Date Reported</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar-check"></i>
+                        <input type="date" id="reportDate" name="reportDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Actual Incident Date</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar-day"></i>
+                        <input type="date" name="incidentDate" required>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Actual Incident Date</label>
+                <label>Incident Category</label>
                 <div class="input-with-icon">
-                    <i class="fas fa-calendar-day"></i>
-                    <input type="date" name="incidentDate" required>
+                    <i class="fas fa-tags"></i>
+                    <select name="incidentType" required>
+                        <option value="" disabled selected>Select category</option>
+                        <option value="Attendance">Attendance/Punctuality</option>
+                        <option value="Operational">Operational Lapse</option>
+                        <option value="Technical">Technical Issue</option>
+                        <option value="Behavioral">Behavioral Conduct</option>
+                        <option value="Others">Others</option>
+                    </select>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>Incident Category</label>
-            <div class="input-with-icon">
-                <i class="fas fa-tags"></i>
-                <select name="incidentType" required>
-                    <option value="" disabled selected>Select category</option>
-                    <option value="Attendance">Attendance/Punctuality</option>
-                    <option value="Operational">Operational Lapse</option>
-                    <option value="Technical">Technical Issue</option>
-                    <option value="Behavioral">Behavioral Conduct</option>
-                    <option value="Safety">Safety/Security</option>
-                    <option value="Others">Others</option>
-                </select>
+            <div class="form-group">
+                <label>Detailed Description</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-edit" style="top: 25px;"></i>
+                    <textarea name="description" rows="4" placeholder="Describe what happened..." required></textarea>
+                </div>
             </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">
+                <span>Submit Report</span>
+                <div class="loader" id="loader"></div>
+                <i class="fas fa-paper-plane" id="planeIcon"></i>
+            </button>
+        </form>
+
+        <div class="footer-text">
+            &copy; 2026 iMerch Media Inc. | System by Ronsanity
         </div>
-
-        <div class="form-group">
-            <label>Detailed Description</label>
-            <div class="input-with-icon">
-                <i class="fas fa-edit" style="top: 25px;"></i>
-                <textarea name="description" rows="4" placeholder="Describe what happened in detail..." required></textarea>
-            </div>
-        </div>
-
-        <button type="submit" class="btn-submit" id="submitBtn">
-            <span>Submit Report</span>
-            <div class="loader" id="loader"></div>
-            <i class="fas fa-paper-plane" id="planeIcon"></i>
-        </button>
-    </form>
-
-    <div class="footer-text">
-        &copy; 2026 iMerch Media Inc. Systems Management
     </div>
-</div>
 
-<script>
-    // Set default date to today for "Date Reported"
-    document.getElementById('reportDate').valueAsDate = new Date();
+    <script>
+        // Real-time 12hr Clock and Date
+        function updateClock() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                hour12: true 
+            };
+            document.getElementById('realtime-clock').textContent = now.toLocaleString('en-US', options);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-    const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
-    const form = document.getElementById('incidentForm');
-    const btn = document.getElementById('submitBtn');
-    const loader = document.getElementById('loader');
-    const icon = document.getElementById('planeIcon');
+        // Dark/Light Theme Logic
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-sun';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-moon';
+            }
+        }
 
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        
-        btn.disabled = true;
-        loader.style.display = 'block';
-        icon.style.display = 'none';
+        // Default Date
+        document.getElementById('reportDate').valueAsDate = new Date();
 
-        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => {
-                alert('Success! Incident report has been logged.');
-                form.reset();
-                document.getElementById('reportDate').valueAsDate = new Date();
-            })
-            .catch(error => {
-                console.error('Error!', error.message);
-                alert('An error occurred. Please try again.');
-            })
-            .finally(() => {
-                btn.disabled = false;
-                loader.style.display = 'none';
-                icon.style.display = 'block';
-            });
-    });
-</script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz4G_QfxDLXqSfc5vmxyumG6dBn8TugnSZYBZ_KTO9hQ3HsVRNjlovuqidK8JdgYhon/exec';
+        const form = document.getElementById('incidentForm');
+        const btn = document.getElementById('submitBtn');
+        const loader = document.getElementById('loader');
+        const icon = document.getElementById('planeIcon');
 
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            btn.disabled = true;
+            loader.style.display = 'block';
+            icon.style.display = 'none';
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch(scriptURL, { method: 'POST', body: JSON.stringify(data)})
+                .then(response => {
+                    alert('Success! Incident report has been logged.');
+                    form.reset();
+                    document.getElementById('reportDate').valueAsDate = new Date();
+                })
+                .catch(error => alert('Error! ' + error.message))
+                .finally(() => {
+                    btn.disabled = false;
+                    loader.style.display = 'none';
+                    icon.style.display = 'block';
+                });
+        });
+    </script>
 </body>
 </html>
