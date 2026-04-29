@@ -190,7 +190,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
-            justify-content: center;scrip
+            justify-content: center;
             align-items: center;
             gap: 10px;
             margin-top: 10px;
@@ -242,72 +242,58 @@
                     <label>Reporter Full Name</label>
                     <div class="input-with-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" name="fullname" placeholder="Enter your name" required>
+                        <input type="text" name="fullname" placeholder="Your name" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Merchandiser Name</label>
+                    <label>Subject Name</label>
                     <div class="input-with-icon">
                         <i class="fas fa-user-tag"></i>
-                        <input type="text" name="merchandiser" placeholder="Enter Merchandiser name" required>
+                        <input type="text" name="subjectName" placeholder="Name of person involved" required>
                     </div>
                 </div>
             </div>
 
             <div class="date-row">
                 <div class="form-group">
-                    <label>Source / Store Location</label>
+                    <label>Location of Incident</label>
                     <div class="input-with-icon">
                         <i class="fas fa-map-marker-alt"></i>
-                        <input type="text" name="source" placeholder="Store name" required>
+                        <input type="text" name="location" placeholder="Where it happened" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Coordinator</label>
+                    <label>Category of Offenses</label>
                     <div class="input-with-icon">
-                        <i class="fas fa-user-tie"></i>
-                        <input type="text" name="coordinator" placeholder="Name of Coordinator" required>
+                        <i class="fas fa-gavel"></i>
+                        <select name="incidentType" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Attendance and Punctuality">Attendance and Punctuality</option>
+                            <option value="Work Performance & Duty">Work Performance & Duty</option>
+                            <option value="Offenses Against Authority">Offenses Against Authority</option>
+                            <option value="Offenses Against Persons">Offenses Against Persons</option>
+                            <option value="Offenses Against Company Property & Interests">Offenses Against Company Property & Interests</option>
+                            <option value="Dishonesty">Dishonesty</option>
+                            <option value="Offenses against Public Morals">Offenses against Public Morals</option>
+                            <option value="Offenses Against Health and Safety">Offenses Against Health and Safety</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
             <div class="date-row">
                 <div class="form-group">
-                    <label>Date Reported</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-calendar-check"></i>
-                        <input type="date" id="reportDate" name="reportDate" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Actual Incident Date</label>
+                    <label>Date of Incident</label>
                     <div class="input-with-icon">
                         <i class="fas fa-calendar-day"></i>
                         <input type="date" name="incidentDate" required>
                     </div>
                 </div>
-            </div>
-
-            <div class="date-row">
                 <div class="form-group">
                     <label>Time of Incident</label>
                     <div class="input-with-icon">
                         <i class="fas fa-clock"></i>
                         <input type="time" name="time" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Incident Category</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-tags"></i>
-                        <select name="incidentType" required>
-                            <option value="" disabled selected>Select category</option>
-                            <option value="Attendance">Attendance/Punctuality</option>
-                            <option value="Operational">Operational Lapse</option>
-                            <option value="Technical">Technical Issue</option>
-                            <option value="Behavioral">Behavioral Conduct</option>
-                            <option value="Others">Others</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -316,17 +302,19 @@
                 <label>Detailed Description</label>
                 <div class="input-with-icon">
                     <i class="fas fa-edit" style="top: 22px;"></i>
-                    <textarea name="description" rows="3" placeholder="Explain the incident clearly..." required></textarea>
+                    <textarea name="description" rows="4" placeholder="Provide a full explanation of the incident (No character limit)..." required></textarea>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Attachments (Select multiple files)</label>
+                <label>Attachments (Evidence/Multiple Files)</label>
                 <div class="input-with-icon">
                     <i class="fas fa-paperclip"></i>
                     <input type="file" id="fileInput" name="attachments" multiple accept="image/*,.pdf,.doc,.docx">
                 </div>
             </div>
+
+            <input type="hidden" name="reportDate" id="reportDate">
 
             <button type="submit" class="btn-submit" id="submitBtn">
                 <span>Submit Report</span>
@@ -364,7 +352,8 @@
             }
         }
 
-        document.getElementById('reportDate').valueAsDate = new Date();
+        // Set hidden report date to today
+        document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
 
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxzwCXui_axRpCg5fg6SC1WQTBu_9xheb1HJ-ep4n3Z5AtAn3C0qswMGWthe2J_9eVk/exec';
         const form = document.getElementById('incidentForm');
@@ -404,7 +393,7 @@
             .then(res => {
                 alert('Success! Incident report submitted.');
                 form.reset();
-                document.getElementById('reportDate').valueAsDate = new Date();
+                document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
             })
             .catch(err => alert('Error: ' + err.message))
             .finally(() => {
