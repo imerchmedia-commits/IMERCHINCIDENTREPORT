@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    :root { --primary: #004aad; }
+    body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
+    
+    /* Login Page Design */
+    #login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #004aad, #00d2ff); }
+    .login-card { width: 350px; padding: 2rem; background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    
+    /* Dashboard Design */
+    #dashboard-container { display: none; padding: 30px; }
+    .table { border-radius: 10px; overflow: hidden; background: white; }
+    .status-Pending { color: #d9534f; font-weight: 600; }
+    .status-Resolved { color: #28a745; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div id="login-container">
+    <div class="login-card text-center">
+      <img src="https://i.imgur.com/YOUR_LOGO_URL.png" style="width: 80px; margin-bottom: 20px;"> <h4 class="mb-4">Admin Access</h4>
+      <input type="text" id="username" class="form-control mb-3" placeholder="Username">
+      <input type="password" id="password" class="form-control mb-3" placeholder="Password">
+      <div class="form-check text-start mb-3">
+        <input type="checkbox" class="form-check-input" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">Remember me</label>
+      </div>
+      <button class="btn btn-primary w-100" onclick="checkLogin()">Sign In</button>
+    </div>
+  </div>
+
+  <div id="dashboard-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Incident Report Dashboard</h2>
+      <button class="btn btn-outline-danger" onclick="logout()">Logout</button>
+    </div>
+    <div class="table-responsive shadow-sm">
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr><th>Timestamp</th><th>Reporter</th><th>Subject</th><th>Violation</th><th>Status</th><th>Action</th></tr>
+        </thead>
+        <tbody id="tableBody"><tr><td colspan="6" class="text-center">Fetching data...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const scriptURL = "YOUR_GOOGLE_SCRIPT_EXEC_URL"; // Ilagay dito ang iyong /exec URL
+
+    // Auto-login Check
+    window.onload = () => {
+      if(localStorage.getItem('isLoggedIn') === 'true') showDashboard();
+    };
+
+    function checkLogin() {
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      
+      // Username at Password (Gawing mas mahirap para sa security)
+      if (user === "iMerchAdmin" && pass === "Security2026!") {
+        if(document.getElementById('rememberMe').checked) localStorage.setItem('isLoggedIn', 'true');
+        showDashboard();
+      } else {
+        alert("Invalid credentials!");
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('login-container').style.display = 'none';
+      document.getElementById('dashboard-container').style.display = 'block';
+      loadData();
+    }
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      location.reload();
+    }
+
+    function loadData() {
+      fetch(scriptURL)
+        .then(res => res.json())
+        .then(data => {
+          let tbody = document.getElementById('tableBody');
+          tbody.innerHTML = "";
+          for (let i = data.length - 1; i > 0; i--) {
+            let row = data[i];
+            tbody.innerHTML += `<tr>
+              <td>${row[0]}</td><td>${row[1]}</td><td>${row[3]}</td><td>${row[6]}</td>
+              <td class="status-${row[9]}">${row[9] || 'Pending'}</td>
+              <td>${row[9] !== 'Resolved' ? `<button class="btn btn-sm btn-success" onclick="resolve('${row[0]}')">Resolve</button>` : 'Done'}</td>
+            </tr>`;
+          }
+        });
+    }
+
+    function resolve(ts) {
+      fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', timestamp: ts, newStatus: 'Resolved' }) })
+      .then(() => loadData());
+    }
+  </script>
+</body>
+</html>
