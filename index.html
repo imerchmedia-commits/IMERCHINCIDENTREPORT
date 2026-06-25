@@ -565,8 +565,6 @@
             const violationSelect = document.getElementById('specificViolation');
             violationSelect.innerHTML = '<option value="" disabled selected>Select Violation</option>';
             
-            if (!category) return; // SAFETY CHECK: Haharangin nito ang crash kapag walang laman ang category
-
             if (offenses[category]) {
                 offenses[category].forEach(item => {
                     const option = document.createElement('option');
@@ -602,7 +600,7 @@
 
         document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
 
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzg2ZOWd9wkhM-B_RSVdPvpjfeHdgEozY-zbZ13VyRHykNjTj0RLSvakZJ_DjqPH-yg/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxEaMqI0MooxLvGjn1LWT-4h-QSX5qWsL_eSldBHAx7oUvOE_XPUMlQZX5HAQ2GPEGY/exec';
         const form = document.getElementById('incidentForm');
 
         function parseJwt (token) {
