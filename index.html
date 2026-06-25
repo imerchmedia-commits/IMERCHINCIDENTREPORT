@@ -221,15 +221,36 @@
             margin-top: 25px;
             font-size: 0.8rem;
             color: var(--text-sub);
+            line-height: 1.6;
         }
 
-        /* Identity Block UI Elements */
+        .footer-values {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            flex-wrap: wrap;
+        }
+
+        .footer-values span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .footer-values i {
+            color: var(--primary-color);
+        }
+
         #loginSection {
             text-align: center;
             padding: 30px 10px;
         }
         #incidentForm {
-            display: none; /* Nakatago bago mag-login */
+            display: none;
         }
         .user-badge {
             background: rgba(0, 74, 173, 0.08);
@@ -398,7 +419,14 @@
         </form>
 
         <div class="footer-text">
-            &copy; 2026 iMerch Media Inc. | System by Ronsanity
+            &copy; 2026 iMerch Media Inc. | Incident Report System Developed By Ron Sarmenta
+            <div class="footer-values">
+                <span><i class="fas fa-heart"></i> Love</span>
+                <span><i class="fas fa-hands-holding-child"></i> Care</span>
+                <span><i class="fas fa-share-nodes"></i> Share</span>
+                <span><i class="fas fa-comments"></i> Communicate</span>
+                <span><i class="fas fa-handshake"></i> Trust</span>
+            </div>
         </div>
     </div>
 
@@ -572,7 +600,6 @@
 
         document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
 
-        // PINALITANG SCRIPT URL GAMIT ANG IYONG BAGONG EXECUTION LINK
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyBdaz-x-SKG5R6ttF8aYpVgt59XpP5wBN3vuSc6uk0gHE64VN62taV5mzJxBtF-25l/exec';
         const form = document.getElementById('incidentForm');
 
