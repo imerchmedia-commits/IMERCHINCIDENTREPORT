@@ -651,11 +651,14 @@
             }
             data.attachments = attachments;
 
+            // FIX: Ginamit ang mode: 'no-cors' para hindi ma-block ng browser
             fetch(scriptURL, { 
-                method: 'POST', 
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             })
-            .then(res => {
+            .then(() => {
                 alert('Success! Incident report submitted.');
                 form.reset();
                 updateSpecificOffenses(''); 
