@@ -525,24 +525,30 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
     function sendData(data) {
     fetch(scriptURL, {
         method: 'POST',
-        mode: 'cors', // Siguraduhing 'cors' ito
+        mode: 'cors', // DAPAT 'cors' ito para mabasa ang JSON response
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     })
     .then(response => {
-        // I-check kung ok ang response bago i-parse
         if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
+            throw new Error('Server returned ' + response.status);
         }
-        return response.text(); // Gamitin muna .text() imbes na .json() para ma-check kung may laman
+        return response.json(); // Ngayon ay maaari na itong i-parse dahil 'cors' mode na
     })
-    .then(text => {
-        console.log("Response mula sa server:", text);
+    .then(result => {
+        console.log("Success:", result);
         alert("Report Submitted Successfully!");
         location.reload();
     })
+    .catch(err => {
+        console.error("Error Details:", err);
+        alert("Error: Check console for details. Siguraduhing na-deploy ang Code.gs bilang 'New Version'.");
+        btn.disabled = false;
+        btn.textContent = "Submit Report";
+    });
+}
     .catch(err => {
         console.error("Error Details:", err);
         alert("Error: Paki-check ang console (F12) para sa detalye.");
