@@ -3,681 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iMerch Incident Report Portal</title>
-    
-    <link rel="icon" href="incident.png" type="image/png">
-    
+    <title>iMerch | Incident Report Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-
     <style>
-        :root {
-            --primary-color: #004aad;
-            --secondary-color: #002d6b;
-            --accent-color: #ff914d;
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-sub: #666666;
-            --border-color: #e1e1e1;
-            --input-bg: #ffffff;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #ffffff;
-            --text-sub: #b0b0b0;
-            --border-color: #333333;
-            --input-bg: #2d2d2d;
-            --secondary-color: #4da3ff;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 650px;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            transition: background 0.3s ease;
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-        }
-
-        .theme-switch {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--card-bg);
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            transition: 0.3s;
-        }
-
-        .logo-section {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .logo-section img {
-            width: 150px;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            color: var(--secondary-color);
-            margin: 0;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-
-        p.subtitle {
-            color: var(--text-sub);
-            font-size: 0.9rem;
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
-
-        #clock-display {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-            min-height: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-            position: relative;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-main);
-            font-size: 0.85rem;
-        }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .input-with-icon i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-color);
-            font-size: 1rem;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 15px 12px 45px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-family: inherit;
-            background: var(--input-bg);
-            color: var(--text-main);
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        textarea {
-            padding-left: 45px;
-            resize: vertical;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(0, 74, 173, 0.1);
-        }
-
-        .date-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        @media (max-width: 480px) {
-            .date-row { grid-template-columns: 1fr; }
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 74, 173, 0.3);
-        }
-
-        .loader {
-            display: none;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .footer-text {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 0.8rem;
-            color: var(--text-sub);
-            line-height: 1.6;
-        }
-
-        .footer-values {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 10px;
-            font-size: 0.75rem;
-            color: var(--text-sub);
-            flex-wrap: wrap;
-        }
-
-        .footer-values span {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .footer-values i {
-            color: var(--primary-color);
-        }
-
-        #loginSection {
-            text-align: center;
-            padding: 30px 10px;
-        }
-        #incidentForm {
-            display: none;
-        }
-        .user-badge {
-            background: rgba(0, 74, 173, 0.08);
-            border: 1px solid var(--primary-color);
-            padding: 10px 18px;
-            border-radius: 30px;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 22px;
-            font-size: 0.88rem;
-            color: var(--text-main);
-        }
-        [data-theme="dark"] .user-badge {
-            background: rgba(77, 163, 255, 0.15);
-            border-color: var(--secondary-color);
-        }
-        .user-badge img {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-        }
+        :root { --primary: #004aad; --accent: #ff914d; --bg: #f4f7f6; --text: #2c3e50; --card: #ffffff; }
+        [data-theme="dark"] { --bg: #1a1a1a; --text: #ffffff; --card: #2d2d2d; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; transition: 0.3s; }
+        .container { max-width: 650px; margin: auto; background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 25px; }
+        .user-badge { background: #f0f4ff; color: var(--primary); padding: 10px 20px; border-radius: 30px; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.85rem; }
+        .input-with-icon { position: relative; }
+        .input-with-icon i { position: absolute; left: 15px; top: 14px; color: var(--primary); }
+        input, select, textarea { width: 100%; padding: 12px 12px 12px 40px; border: 2px solid #e1e1e1; border-radius: 10px; box-sizing: border-box; }
+        .date-row { display: flex; gap: 15px; }
+        .date-row .form-group { flex: 1; }
+        .btn-submit { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .footer-text { text-align: center; margin-top: 30px; font-size: 0.75rem; color: #888; }
+        .footer-values { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
     </style>
 </head>
 <body data-theme="light">
 
-    <button class="theme-switch" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-        <i class="fas fa-moon" id="theme-icon"></i>
-    </button>
+<div class="container">
+    <div class="header">
+        <h2>Incident Report Portal</h2>
+        <div id="clock-display"></div>
+        <button onclick="toggleTheme()" style="margin-top:10px; cursor:pointer;"><i id="theme-icon" class="fas fa-moon"></i></button>
+    </div>
 
-    <div class="container">
-        <div class="logo-section">
-            <img src="imerch.png" alt="iMerch Logo">
-            <h2>Incident Report Portal</h2>
-            <p class="subtitle">Ensuring Excellence through Accountability</p>
-            <div id="clock-display">Loading time...</div>
-        </div>
-
-        <div id="loginSection">
-            <p style="color: var(--text-sub); font-size: 0.95rem; margin-bottom: 25px;">
-                Please verify your employee account to log an incident report.
-            </p>
-            <div style="display: flex; justify-content: center;">
-                <div id="g_id_onload"
-                     data-client_id="36265883924-a5o7on325p00q6shuj85eshqe51rpf28.apps.googleusercontent.com"
-                     data-context="signin"
-                     data-ux_mode="popup"
-                     data-callback="handleCredentialResponse"
-                     data-auto_prompt="false">
-                </div>
-                <div class="g_id_signin"
-                     data-type="standard"
-                     data-shape="pill"
-                     data-theme="filled_blue"
-                     data-text="signin_with"
-                     data-size="large"
-                     data-logo_alignment="left">
-                </div>
+    <form id="incidentForm">
+        <div style="text-align: center;">
+            <div class="user-badge">
+                <i class="fas fa-user-circle"></i>
+                <span>Active Reporter: <b id="userEmailLabel">User</b></span>
             </div>
         </div>
 
-        <form id="incidentForm">
-            
-            <div style="text-align: center;">
-                <div class="user-badge">
-                    <img id="userPhoto" src="" alt="User profile">
-                    <span>Active Reporter: <b id="userEmailLabel"></b></span>
-                </div>
-            </div>
+        <input type="hidden" name="reporterEmail" id="verifiedReporterEmail">
+        <input type="hidden" name="reportDate" id="reportDate">
 
-            <input type="hidden" name="reporterEmail" id="verifiedReporterEmail">
-            <input type="hidden" name="reportDate" id="reportDate">
-
-            <div class="date-row">
-                <div class="form-group">
-                    <label>Reporter Full Name</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" name="fullname" placeholder="Your name" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Subject Name</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-user-tag"></i>
-                        <input type="text" name="subjectName" placeholder="Name of person involved" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="date-row">
-                <div class="form-group">
-                    <label>Location of Incident</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <input type="text" name="location" placeholder="Where it happened" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Category of Offenses</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-gavel"></i>
-                        <select name="incidentType" id="categorySelect" onchange="updateSpecificOffenses(this.value)" required>
-                            <option value="" disabled selected>Select Category</option>
-                            <option value="Attendance and Punctuality">Attendance and Punctuality</option>
-                            <option value="Work Performance & Duty">Work Performance & Duty</option>
-                            <option value="Offenses Against Authority">Offenses Against Authority</option>
-                            <option value="Offenses Against Persons">Offenses Against Persons</option>
-                            <option value="Offenses Against Company Property & Interests">Offenses Against Company Property & Interests</option>
-                            <option value="Dishonesty">Dishonesty</option>
-                            <option value="Offenses against Public Morals">Offenses against Public Morals</option>
-                            <option value="Offenses Against Health and Safety">Offenses Against Health and Safety</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
+        <div class="date-row">
             <div class="form-group">
-                <label>Specific Violation</label>
+                <label>Reporter Full Name</label>
                 <div class="input-with-icon">
-                    <i class="fas fa-list-ul"></i>
-                    <select name="specificViolation" id="specificViolation" required>
-                        <option value="" disabled selected>Please select a category first</option>
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="fullname" placeholder="Your name" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Subject Name</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user-tag"></i>
+                    <input type="text" name="subjectName" placeholder="Name of person involved" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="date-row">
+            <div class="form-group">
+                <label>Location of Incident</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" name="location" placeholder="Where it happened" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Category of Offenses</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-gavel"></i>
+                    <select name="incidentType" id="categorySelect" onchange="updateSpecificOffenses(this.value)" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option value="Attendance and Punctuality">Attendance and Punctuality</option>
+                        <option value="Work Performance & Duty">Work Performance & Duty</option>
+                        <option value="Offenses Against Authority">Offenses Against Authority</option>
+                        <option value="Offenses Against Persons">Offenses Against Persons</option>
+                        <option value="Offenses Against Company Property & Interests">Offenses Against Company Property & Interests</option>
+                        <option value="Dishonesty">Dishonesty</option>
+                        <option value="Offenses against Public Morals">Offenses against Public Morals</option>
+                        <option value="Offenses Against Health and Safety">Offenses Against Health and Safety</option>
                     </select>
                 </div>
             </div>
+        </div>
 
-            <div class="date-row">
-                <div class="form-group">
-                    <label>Date of Incident</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-calendar-day"></i>
-                        <input type="date" name="incidentDate" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Time of Incident</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-clock"></i>
-                        <input type="time" name="time" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Detailed Description</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-edit" style="top: 22px;"></i>
-                    <textarea name="description" rows="4" placeholder="Provide additional details (No character limit)..." required></textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Attachments (Evidence/Multiple Files)</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-paperclip"></i>
-                    <input type="file" id="fileInput" name="attachments" multiple accept="image/*,.pdf,.doc,.docx">
-                </div>
-            </div>
-
-            <button type="submit" class="btn-submit" id="submitBtn">
-                <span>Submit Report</span>
-                <div class="loader" id="loader"></div>
-                <i class="fas fa-paper-plane" id="planeIcon"></i>
-            </button>
-        </form>
-
-        <div class="footer-text">
-            &copy; 2026 iMerch Media Inc. | Incident Report System Developed By Ron Sarmenta
-            <div class="footer-values">
-                <span><i class="fas fa-heart"></i> Love</span>
-                <span><i class="fas fa-hands-holding-child"></i> Care</span>
-                <span><i class="fas fa-share-nodes"></i> Share</span>
-                <span><i class="fas fa-comments"></i> Communicate</span>
-                <span><i class="fas fa-handshake"></i> Trust</span>
+        <div class="form-group">
+            <label>Specific Violation</label>
+            <div class="input-with-icon">
+                <i class="fas fa-list-ul"></i>
+                <select name="specificViolation" id="specificViolation" required>
+                    <option value="" disabled selected>Please select a category first</option>
+                </select>
             </div>
         </div>
+
+        <div class="date-row">
+            <div class="form-group">
+                <label>Date of Incident</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-calendar-day"></i>
+                    <input type="date" name="incidentDate" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Time of Incident</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-clock"></i>
+                    <input type="time" name="time" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Detailed Description</label>
+            <div class="input-with-icon">
+                <i class="fas fa-edit" style="top: 22px;"></i>
+                <textarea name="description" rows="4" placeholder="Provide additional details..." required></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+            <span>Submit Report</span>
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </form>
+
+    <div class="footer-text">
+        &copy; 2026 iMerch Media Inc. | Developed By Ron Sarmenta
+        <div class="footer-values">
+            <span><i class="fas fa-heart"></i> Love</span>
+            <span><i class="fas fa-hands-holding-child"></i> Care</span>
+            <span><i class="fas fa-share-nodes"></i> Share</span>
+        </div>
     </div>
+</div>
 
-    <script>
-        const offenses = {
-            "Attendance and Punctuality": [
-                "1. Failure to time-in and/or time-out on the time record.",
-                "2. Failure to sign on the time record.",
-                "3. Loss of time record",
-                "4. Tardiness – exceeding the grace period of 15 minutes.",
-                "5. Habitual Tardiness- Three (3) times a month",
-                "6. Habitual Absences – Two (2) absences in a month (non-medical)",
-                "7. Absence Without Leave (AWOL) which hampered the operations.",
-                "8. Absence Without Official Leave of three (3) (non)/consecutive days.",
-                "9. Failure to report absence or file a leave of absence on date incurred",
-                "10. Failure to notify superior of absence/ tardiness",
-                "11. Malingering or pretending to be sick or giving false excuses.",
-                "12. Tampering or falsifying time record.",
-                "13. Quitting work before dismissal time or under time without permission.",
-                "14. Failure to attend official company meetings or activities."
-            ],
-            "Work Performance & Duty": [
-                "1. Failure to perform required work according to company standards.",
-                "2. Engaging in non-work related activities during official working hours.",
-                "3. Engaging in unauthorized activities (selling/promoting) within premises.",
-                "4. Failure to submit required reports on time.",
-                "5. Submission of incomplete reports.",
-                "6. Non-submission of reports as required by superior.",
-                "7. Deviation of work schedule without prior approval.",
-                "8. Failure to answer communications (email, SMS, calls) within the day.",
-                "9. Failure to observe established SOPs in equipment or service.",
-                "10. Failure to observe and implement health and safety measures.",
-                "11. Gross negligence in general.",
-                "12. Gross Negligence causing serious damage to company or client.",
-                "13. Failure to pull-out expired products in the selling area.",
-                "14. Reporting for work under influence of liquor or drugs.",
-                "15. Drinking liquor while on duty.",
-                "16. Engaging in or holding unofficial/unauthorized meetings.",
-                "17. Loafing or wasting time, prolonging rest periods.",
-                "18. Loitering, sleeping, or napping during official working hours.",
-                "19. Gambling within office or work premises.",
-                "20. Engaging in horseplay, making excessive noise within premises.",
-                "21. Leaving place of work within working hours without permission.",
-                "22. Failure to immediately report a personnel injury on Company time.",
-                "23. Failure to notify HR of personal data changes within 7 days.",
-                "24. Causing loss of time or money to company because of negligence.",
-                "25. Use of company equipment for social networking or games.",
-                "26. Installing unauthorized and unlicensed software in company computers.",
-                "27. Offering or accepting anything of value for job assignment."
-            ],
-            "Offenses Against Authority": [
-                "1. Failure to report for overtime work after having agreed to do so.",
-                "2. Failure to follow directives/instructions from company authorities.",
-                "3. Any act constituting disrespect or contempt for company authorities.",
-                "4. Threat or intimidation against a Company authority with intent to harm.",
-                "5. Willfully holding back, slowing down, or hindering work output.",
-                "6. Refusing to accept or carry out official assignments from superiors.",
-                "7. Insubordination in general.",
-                "8. Refusing to cooperate with company officials in investigations.",
-                "9. Grave abuse of authority by instructing subordinates to act against policy.",
-                "10. Performing acts/transactions binding the Company without authority."
-            ],
-            "Offenses Against Persons": [
-                "1. Inciting/provoking a fight or causing bodily harm/injury.",
-                "2. Threat, intimidation, or coercion against fellow employees.",
-                "3. Using profane/obscene words or insulting dignity of others.",
-                "4. Lending or borrowing money from co-workers.",
-                "5. Stealing or attempt to steal from co-workers.",
-                "6. Sexual harassment on co-workers/clients/suppliers.",
-                "7. Giving false accusations or testimony against others.",
-                "8. Engaging in gossips about fellow employees.",
-                "9. Bashing or bullying co-workers.",
-                "10. Spreading offensive material via mobile/internet to degrade a person.",
-                "11. Grossly scandalous or indecent language in addressing customers.",
-                "12. Discourteous acts or grave threats towards customers/clients.",
-                "13. Any and all immoral acts including sexual harassment of customers.",
-                "14. Making false, vicious, or malicious statements concerning customers.",
-                "15. Offense against honor (libel, defamation, slander) against customers."
-            ],
-            "Offenses Against Company Property & Interests": [
-                "1. Failure to comply with procedures in operation of machines/equipment.",
-                "2. Using company property or tools without permission or authority.",
-                "3. Defacing company fixture/logo, vandalism, or dirtying of walls.",
-                "4. Destruction, damage or misuse of property through carelessness.",
-                "5. Theft, robbery or appropriation of property for personal gain.",
-                "6. Malversation, misappropriation or unauthorized disbursement of funds.",
-                "7. Pilferage of company property or products of clients.",
-                "8. Engaging in unauthorized sale of property for personal benefit.",
-                "9. Swindling (estafa) or taking (theft) of company funds or property.",
-                "10. Using company time/materials/equipment for unauthorized work.",
-                "11. Substituting company materials/equipment with poorer quality ones.",
-                "12. Unauthorized alteration or removal of property from premises.",
-                "13. Misrepresentation or unauthorized transactions using company name.",
-                "14. Using mobile/internet to spread material that damages reputation.",
-                "15. Disclosure or release of company/client confidential information.",
-                "16. Willful concealment of material information concerning company interest.",
-                "17. Unauthorized opening, removal, or destruction of documents/records."
-            ],
-            "Dishonesty": [
-                "1. Giving false testimony during investigation or fact-finding process.",
-                "2. Giving false information in general.",
-                "3. Tampering job cards or making false reports on work (time padding).",
-                "4. Conniving with subordinates in falsifying any documents.",
-                "5. Falsification or misrepresentation of personal records for employment.",
-                "6. Attempt to falsify or pad travel expenses, receipts, or invoices.",
-                "7. Falsifying any written statement or making misleading information.",
-                "8. Forgery.",
-                "9. Engaging or conniving in anomalous transactions.",
-                "10. Bribery or offering/accepting anything of value for job assignment.",
-                "11. Favoring suppliers/customers in consideration of kickbacks.",
-                "12. Intentionally punching or writing on timecard of another employee.",
-                "13. Falsifying Personnel or Company Records."
-            ],
-            "Offenses against Public Morals": [
-                "1. Showing or exhibiting pornographic materials, pictures or literature.",
-                "2. Conduct of grossly scandalous or indecent language within premises.",
-                "3. Showing discourteous acts towards co-employees, suppliers, or customers.",
-                "4. Direct involvement in any scandal or crime.",
-                "5. Sexual harassment of male or female employees/clients/suppliers.",
-                "6. Carrying deadly weapons or any prohibited drugs.",
-                "7. Direct involvement/connivance with a criminal organization."
-            ],
-            "Offenses Against Health and Safety": [
-                "1. Disregard of company directives relating to sanitary conditions.",
-                "2. Refusal or failure to follow safety rules.",
-                "3. Refusal or failure to submit oneself to a Medical Examination.",
-                "4. Reporting for work having serious contagious disease without reporting.",
-                "5. Failure to shut down or unplug electrical equipment before leaving.",
-                "6. Failure to clean assigned working areas to promote good hygiene.",
-                "7. Failure to report damaged equipment or furniture.",
-                "8. Failure to immediately report an accident or injury involving personnel."
-            ]
-        };
+<script>
+    const offenses = {
+        "Attendance and Punctuality": ["1. Failure to time-in/out", "2. Failure to sign", "3. Loss of time record", "4. Tardiness", "5. Habitual Tardiness", "6. Habitual Absences", "7. AWOL", "8. AWOL (3 days)", "9. Failure to file leave", "10. Failure to notify", "11. Malingering", "12. Falsifying time record", "13. Undertime", "14. Failure to attend meetings"],
+        "Work Performance & Duty": ["1. Poor performance", "2. Non-work activities", "3. Unauthorized selling", "4. Late reports", "5. Incomplete reports", "6. Non-submission", "7. Deviation of schedule", "8. Failure to answer comms", "9. SOP violation", "10. Health/Safety", "11. Negligence", "12. Gross negligence", "13. Expired products", "14. Under influence", "15. Drinking", "16. Unauthorized meetings", "17. Loafing", "18. Sleeping", "19. Gambling", "20. Horseplay", "21. Leaving post", "22. Failure to report injury", "23. Data change notif", "24. Causing loss", "25. Equipment misuse", "26. Unauthorized software", "27. Job assignment bribery"],
+        "Offenses Against Authority": ["1. No-show OT", "2. Disobedience", "3. Disrespect", "4. Threat", "5. Sabotage", "6. Refusal of assignment", "7. Insubordination", "8. Non-cooperation", "9. Abuse of authority", "10. Unauthorized transaction"],
+        "Offenses Against Persons": ["1. Fighting", "2. Threat/Intimidation", "3. Profanity", "4. Money lending", "5. Stealing", "6. Sexual harassment", "7. False accusations", "8. Gossiping", "9. Bullying", "10. Offensive material", "11. Indecent language", "12. Discourtesy", "13. Immoral acts", "14. Malicious statements", "15. Libel"],
+        "Offenses Against Company Property & Interests": ["1. Machine SOP", "2. Unauthorized use", "3. Vandalism", "4. Damage", "5. Theft", "6. Malversation", "7. Pilferage", "8. Unauthorized sale", "9. Estafa", "10. Unauthorized work", "11. Substituting materials", "12. Unauthorized removal", "13. Misrepresentation", "14. Reputation damage", "15. Confidentiality breach", "16. Concealment", "17. Destruction of records"],
+        "Dishonesty": ["1. False testimony", "2. False info", "3. Time padding", "4. Connivance", "5. Falsified records", "6. Expense padding", "7. Misleading statements", "8. Forgery", "9. Anomalous transactions", "10. Bribery", "11. Kickbacks", "12. Buddy punching", "13. Falsifying official records"],
+        "Offenses against Public Morals": ["1. Pornography", "2. Scandalous language", "3. Discourteous acts", "4. Criminal involvement", "5. Sexual harassment", "6. Weapons/drugs", "7. Criminal organization"],
+        "Offenses Against Health and Safety": ["1. Sanitary disregard", "2. Safety rule violation", "3. Medical exam refusal", "4. Contagious disease", "5. Electrical hazard", "6. Poor hygiene", "7. Damage to equipment", "8. Failure to report accident"]
+    };
 
-        function updateSpecificOffenses(category) {
-            const violationSelect = document.getElementById('specificViolation');
-            violationSelect.innerHTML = '<option value="" disabled selected>Select Violation</option>';
-            
-            if (offenses[category]) {
-                offenses[category].forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item;
-                    option.textContent = item;
-                    violationSelect.appendChild(option);
-                });
-            }
-        }
-
-        function updateTime() {
-            const now = new Date();
-            const options = { 
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-            };
-            document.getElementById('clock-display').textContent = now.toLocaleString('en-US', options);
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        function toggleTheme() {
-            const body = document.body;
-            const icon = document.getElementById('theme-icon');
-            if (body.getAttribute('data-theme') === 'light') {
-                body.setAttribute('data-theme', 'dark');
-                icon.className = 'fas fa-sun';
-            } else {
-                body.setAttribute('data-theme', 'light');
-                icon.className = 'fas fa-moon';
-            }
-        }
-
-        document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
-
-        const scriptURL = "https://script.google.com/macros/s/AKfycbz4x-i8LLRU9yseLIUiOIeapc5kdqluj0lOpKQ8xXiZndUmW4Tsp8t1ZA3RNTF8F39e/exec";
-        const form = document.getElementById('incidentForm');
-
-        function parseJwt (token) {
-            var base64Url = token.split('.')[1];
-            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
-        }
-
-        function handleCredentialResponse(response) {
-            const responsePayload = parseJwt(response.credential);
-            
-            document.getElementById('verifiedReporterEmail').value = responsePayload.email;
-            document.getElementById('userEmailLabel').textContent = responsePayload.email;
-            document.getElementById('userPhoto').src = responsePayload.picture;
-            
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('incidentForm').style.display = 'block';
-        }
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const loader = document.getElementById('loader');
-            const icon = document.getElementById('planeIcon');
-
-            btn.disabled = true;
-            loader.style.display = 'block';
-            icon.style.display = 'none';
-
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            const fileInput = document.getElementById('fileInput');
-            const files = fileInput.files;
-            const attachments = [];
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const base64Data = await toBase64(file);
-                attachments.push({
-                    base64: base64Data.split(',')[1],
-                    type: file.type,
-                    name: file.name
-                });
-            }
-            data.attachments = attachments;
-
-            // FIX: Ginamit ang mode: 'no-cors' para hindi ma-block ng browser
-            fetch(scriptURL, { 
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-            .then(() => {
-                alert('Success! Incident report submitted.');
-                form.reset();
-                updateSpecificOffenses(''); 
-                document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
-            })
-            .catch(err => alert('Error: ' + err.message))
-            .finally(() => {
-                btn.disabled = false;
-                loader.style.display = 'none';
-                icon.style.display = 'block';
-            });
+    function updateSpecificOffenses(category) {
+        const vSelect = document.getElementById('specificViolation');
+        vSelect.innerHTML = '<option value="" disabled selected>Select Violation</option>';
+        (offenses[category] || []).forEach(item => {
+            const opt = document.createElement('option'); opt.value = item; opt.textContent = item;
+            vSelect.appendChild(opt);
         });
+    }
 
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    </script>
+    function updateTime() {
+        document.getElementById('clock-display').textContent = new Date().toLocaleString();
+    }
+    setInterval(updateTime, 1000); updateTime();
+
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        const isLight = body.getAttribute('data-theme') === 'light';
+        body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+        icon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+    }
+
+    document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
+    const form = document.getElementById('incidentForm');
+</script>
 </body>
 </html>
