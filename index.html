@@ -536,29 +536,27 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
             fileType: file ? file.type : ""
         };
 
-        // Paggamit ng 'no-cors' para iwas CORS error
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors', 
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        })
-        .then(() => {
-            alert("Report Submitted Successfully!");
-            location.reload();
-        })
-        .catch(err => {
-            alert("Error: " + err);
-            btn.disabled = false;
-        });
-    };
-
-    if (file) {
-        reader.readAsDataURL(file);
+        // Palitan ang fetch call sa iyong script
+fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify(formData) // Inalis ang headers dito, hayaan ang browser ang mag-set
+})
+.then(response => response.json()) // Ngayon, babasahin na natin ang response
+.then(data => {
+    if (data.result === 'success') {
+        alert("Report Submitted Successfully!");
+        location.reload();
     } else {
-        // Kapag walang file, diretso sa processing
-        reader.onload({ target: { result: "," } });
+        alert("Error from server: " + data.error);
+        btn.disabled = false;
+        btn.textContent = "Submit Report";
     }
+})
+.catch(err => {
+    console.error(err);
+    alert("Error: Connection issue. Paki-check ang internet o ang Script URL.");
+    btn.disabled = false;
+    btn.textContent = "Submit Report";
 });
 </script>
 </body>
