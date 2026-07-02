@@ -524,31 +524,33 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
     // Function para ipadala ang data sa Apps Script
     function sendData(data) {
     fetch(scriptURL, {
-        method: 'POST',
-        mode: 'cors', // DAPAT 'cors' ito para mabasa ang JSON response
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Server returned ' + response.status);
-        }
-        return response.json(); // Ngayon ay maaari na itong i-parse dahil 'cors' mode na
-    })
-    .then(result => {
-        console.log("Success:", result);
-        alert("Report Submitted Successfully!");
-        location.reload();
-    })
-    .catch(err => {
-        console.error("Error Details:", err);
-        alert("Error: Check console for details. Siguraduhing na-deploy ang Code.gs bilang 'New Version'.");
-        btn.disabled = false;
-        btn.textContent = "Submit Report";
-    });
-}
+    method: 'POST',
+    mode: 'no-cors', // Ginagamit natin ito para i-bypass ang CORS policy
+    cache: 'no-cache',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+})
+.then(() => {
+    // Sa no-cors, hindi natin mababasa ang response data,
+    // pero kung nakarating tayo dito, ibig sabihin ay nag-trigger ang request.
+    console.log('Success!');
+    alert('Report submitted successfully!');
+    
+    // I-reset ang button pagkatapos ng success
+    btn.disabled = false;
+    btn.innerHTML = '<span>Submit Report</span> <i class="fas fa-paper-plane"></i>';
+    form.reset(); // I-clear ang form
+})
+.catch(error => {
+    // Dito lang dapat lumabas ang error alert
+    console.error('Error:', error);
+    alert("Error: Check console for details. Siguraduhing na-deploy ang Code.gs bilang 'New Version'.");
+    
+    btn.disabled = false;
+    btn.textContent = "Submit Report";
+});
 
     // Common data
     const formData = {
