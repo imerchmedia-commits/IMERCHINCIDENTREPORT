@@ -16,6 +16,7 @@
             --border: #e0e0e0;
             --input-bg: #ffffff;
         }
+
         [data-theme="dark"] {
             --gold: #ffd700;
             --red: #ff4444;
@@ -25,6 +26,7 @@
             --border: #444444;
             --input-bg: #3d3d3d;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
@@ -33,6 +35,7 @@
             margin: 0;
             transition: background-color 0.3s, color 0.3s;
         }
+
         .container {
             max-width: 700px;
             margin: 20px auto;
@@ -42,9 +45,20 @@
             border: 1px solid var(--border);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        .hidden { display: none; }
-        .logo-box { text-align: center; margin-bottom: 20px; }
-        .logo-box img { width: 150px; }
+
+        .hidden {
+            display: none;
+        }
+
+        .logo-box {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-box img {
+            width: 150px;
+        }
+
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -57,29 +71,52 @@
             background: var(--white);
             border: 1px solid var(--border);
         }
+
         .header {
             text-align: center;
             margin-bottom: 25px;
             border-bottom: 2px solid var(--red);
             padding-bottom: 15px;
         }
-        .header h2 { color: var(--gold); margin: 0; text-transform: uppercase; }
+
+        .header h2 {
+            color: var(--gold);
+            margin: 0;
+            text-transform: uppercase;
+        }
+
         .user-badge {
             background: #f9f9f9;
             padding: 12px;
             border-radius: 8px;
             border: 1px solid var(--border);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            display: inline-block;
             margin-bottom: 20px;
             color: #333;
+            font-weight: 600;
         }
-        .user-badge img { width: 30px; height: 30px; border-radius: 50%; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; }
-        .input-with-icon { position: relative; }
-        .input-with-icon i { position: absolute; left: 12px; top: 14px; color: var(--gold); }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 12px;
+            top: 14px;
+            color: var(--gold);
+        }
+
         input, select, textarea {
             width: 100%;
             padding: 12px 12px 12px 40px;
@@ -89,8 +126,16 @@
             background: var(--input-bg);
             color: var(--text);
         }
-        .date-row { display: flex; gap: 15px; }
-        .date-row .form-group { flex: 1; }
+
+        .date-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .date-row .form-group {
+            flex: 1;
+        }
+
         .btn-submit {
             width: 100%;
             padding: 14px;
@@ -106,6 +151,7 @@
             gap: 10px;
             font-size: 16px;
         }
+
         .footer-text {
             text-align: center;
             margin-top: 40px;
@@ -114,6 +160,7 @@
             border-top: 1px solid var(--border);
             padding-top: 20px;
         }
+
         .footer-values {
             display: flex;
             justify-content: center;
@@ -127,22 +174,39 @@
 </head>
 <body>
 
-<div class="theme-toggle" onclick="toggleTheme()"><i id="theme-icon" class="fas fa-moon"></i></div>
+<div class="theme-toggle" onclick="toggleTheme()">
+    <i id="theme-icon" class="fas fa-moon"></i>
+</div>
 
 <div id="loginSection" class="container">
-    <div class="logo-box"><img src="imerch.png" alt="iMerch Logo"></div>
+    <div class="logo-box">
+        <img src="imerch.png" alt="iMerch Logo">
+    </div>
     <div style="text-align: center;">
-        <h2>Login Access</h2>
+        <h2>Incident Portal Login Access</h2>
         <div class="input-with-icon" style="max-width: 300px; margin: 20px auto;">
             <i class="fas fa-envelope"></i>
             <input type="email" id="companyEmail" placeholder="Enter @imerchmedia.net email">
         </div>
         <button class="btn-submit" onclick="verifyLogin()" style="max-width: 300px; margin: auto;">Login to Portal</button>
     </div>
+    
+    <div class="footer-text">
+        &copy; 2026 iMerch Media Inc. | System Developed By Ron Sarmenta
+        <div class="footer-values">
+            <span><i class="fas fa-heart"></i> Love</span>
+            <span><i class="fas fa-hands-holding-child"></i> Care</span>
+            <span><i class="fas fa-share-nodes"></i> Share</span>
+            <span><i class="fas fa-comments"></i> Communicate</span>
+            <span><i class="fas fa-handshake"></i> Trust</span>
+        </div>
+    </div>
 </div>
 
 <div id="reportSection" class="container hidden">
-    <div class="logo-box"><img src="imerch.png" alt="iMerch Logo"></div>
+    <div class="logo-box">
+        <img src="imerch.png" alt="iMerch Logo">
+    </div>
     <div class="header">
         <h2>Incident Report Portal</h2>
     </div>
@@ -150,8 +214,7 @@
     <form id="incidentForm">
         <div style="text-align: center;">
             <div class="user-badge">
-                <img src="https://via.placeholder.com/30" alt="User">
-                <span>Reporter: <b id="userEmailLabel"></b></span>
+                Reporter: <span id="userEmailLabel"></span>
             </div>
         </div>
         <input type="hidden" name="reporterEmail" id="verifiedReporterEmail">
@@ -160,22 +223,32 @@
         <div class="date-row">
             <div class="form-group">
                 <label>Reporter Full Name</label>
-                <div class="input-with-icon"><i class="fas fa-user"></i><input type="text" name="fullname" required></div>
+                <div class="input-with-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="fullname" required>
+                </div>
             </div>
             <div class="form-group">
                 <label>Subject Name</label>
-                <div class="input-with-icon"><i class="fas fa-user-tag"></i><input type="text" name="subjectName" required></div>
+                <div class="input-with-icon">
+                    <i class="fas fa-user-tag"></i>
+                    <input type="text" name="subjectName" required>
+                </div>
             </div>
         </div>
 
         <div class="date-row">
             <div class="form-group">
                 <label>Location</label>
-                <div class="input-with-icon"><i class="fas fa-map-marker-alt"></i><input type="text" name="location" required></div>
+                <div class="input-with-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" name="location" required>
+                </div>
             </div>
             <div class="form-group">
                 <label>Category</label>
-                <div class="input-with-icon"><i class="fas fa-gavel"></i>
+                <div class="input-with-icon">
+                    <i class="fas fa-gavel"></i>
                     <select name="incidentType" id="categorySelect" onchange="updateSpecificOffenses(this.value)" required>
                         <option value="" disabled selected>Select Category</option>
                         <option value="Attendance and Punctuality">Attendance and Punctuality</option>
@@ -193,7 +266,8 @@
 
         <div class="form-group">
             <label>Specific Violation</label>
-            <div class="input-with-icon"><i class="fas fa-list-ul"></i>
+            <div class="input-with-icon">
+                <i class="fas fa-list-ul"></i>
                 <select name="specificViolation" id="specificViolation" required>
                     <option value="" disabled selected>Select Category first</option>
                 </select>
@@ -203,17 +277,24 @@
         <div class="date-row">
             <div class="form-group">
                 <label>Date of Incident</label>
-                <div class="input-with-icon"><i class="fas fa-calendar-day"></i><input type="date" name="incidentDate" required></div>
+                <div class="input-with-icon">
+                    <i class="fas fa-calendar-day"></i>
+                    <input type="date" name="incidentDate" required>
+                </div>
             </div>
             <div class="form-group">
                 <label>Time</label>
-                <div class="input-with-icon"><i class="fas fa-clock"></i><input type="time" name="time" required></div>
+                <div class="input-with-icon">
+                    <i class="fas fa-clock"></i>
+                    <input type="time" name="time" required>
+                </div>
             </div>
         </div>
 
         <div class="form-group">
             <label>Detailed Description</label>
-            <div class="input-with-icon"><i class="fas fa-edit" style="top: 22px;"></i>
+            <div class="input-with-icon">
+                <i class="fas fa-edit" style="top: 22px;"></i>
                 <textarea name="description" rows="4" required></textarea>
             </div>
         </div>
@@ -226,9 +307,9 @@
     <div class="footer-text">
         &copy; 2026 iMerch Media Inc. | System Developed By Ron Sarmenta
         <div class="footer-values">
-            <span><i class="fas fa-heart"></i> Love</span> 
+            <span><i class="fas fa-heart"></i> Love</span>
             <span><i class="fas fa-hands-holding-child"></i> Care</span>
-            <span><i class="fas fa-share-nodes"></i> Share</span> 
+            <span><i class="fas fa-share-nodes"></i> Share</span>
             <span><i class="fas fa-comments"></i> Communicate</span>
             <span><i class="fas fa-handshake"></i> Trust</span>
         </div>
