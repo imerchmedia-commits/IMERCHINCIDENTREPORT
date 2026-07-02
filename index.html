@@ -306,8 +306,14 @@
                 <textarea name="description" rows="4" required></textarea>
             </div>
         </div>
-
-        <button type="submit" class="btn-submit" id="submitBtn">
+        <div class="form-group">
+            <label>Attachments (Upload Photos/Docs)</label>
+            <div class="input-with-icon">
+              <i class="fas fa-paperclip"></i>
+        <input type="file" name="attachments" multiple style="padding-top: 8px;">
+            </div>
+        </div>        
+       <button type="submit" class="btn-submit" id="submitBtn">
             <span>Submit Report</span> <i class="fas fa-paper-plane"></i>
         </button>
     </form>
