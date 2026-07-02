@@ -525,7 +525,7 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
     function sendData(data) {
     fetch(scriptURL, {
         method: 'POST',
-        mode: 'cors', // Palitan ito mula no-cors
+        mode: 'no-cors', // Palitan ito mula no-cors
         headers: {
             "Content-Type": "application/json"
         },
