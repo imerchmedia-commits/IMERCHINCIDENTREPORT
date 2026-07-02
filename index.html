@@ -332,7 +332,7 @@
 
 <script>
     // Configuration
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxkMzKwLVNmbWGOWJRJWNTHzeWRm3RYvCw7Csr3AQZZHGICL_IP8kpWKX1j5fQIbG9j/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzmUvtuyuKRkXIgOLWxNg_Lkgm9WxJKbqwTsDA-eS1a5Nn8lXq7xi7fOWX38yP_IKHe/exec";
 
     // Offenses Data Object
     const offenses = {
@@ -552,18 +552,17 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
 
     // Common data
     const formData = {
-        reporterEmail: form.reporterEmail.value,
-        fullname: form.fullname.value,
-        subjectName: form.subjectName.value,
-        location: form.location.value,
-        incidentType: form.incidentType.value,
-        specificViolation: form.specificViolation.value,
-        incidentDate: form.incidentDate.value,
-        time: form.time.value,
-        description: form.description.value,
-        fileName: file ? file.name : "",
-        fileType: file ? file.type : ""
-    };
+    reporterName: form.fullname.value,
+    reporterEmail: form.reporterEmail.value,
+    subjectName: form.subjectName.value,
+    location: form.location.value,
+    incidentType: form.incidentType.value,
+    specificViolation: form.specificViolation.value,
+    incidentDate: form.incidentDate.value,
+    time: form.time.value,
+    description: form.description.value
+};
+// I-pass ang formData na ito sa iyong sendData function
 
     if (file) {
         const reader = new FileReader();
