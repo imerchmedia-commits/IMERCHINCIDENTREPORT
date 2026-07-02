@@ -332,7 +332,7 @@
 
 <script>
     // Configuration
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwylcE-15IpqEcW_90FMY3LFMi8G-wWAKaHKFY0XYkh5pUDv2zZZEHXOMl6HtDzVNAj/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzLfn1gFpn4cWH0WA3MMB8rdp_hxWjaD3Pfc4Idi1N5GTlUFH1CUvB8_EJ1_lpO0DA4/exec";
 
     // Offenses Data Object
     const offenses = {
@@ -506,24 +506,47 @@
     }
 
     // Submit Handler
-    document.getElementById('incidentForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.textContent = "Submitting...";
-        
-        fetch(scriptURL, {
-            method: 'POST',
-            body: new FormData(this)
-        })
-        .then(() => {
-            alert("Report Submitted Successfully!");
-            location.reload();
-        })
-        .catch(err => {
-            alert("Error submitting report. Please check your connection.");
-            btn.textContent = "Submit Report";
+    document.getElementById('incidentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = "Uploading...";
+    btn.disabled = true;
+
+    const fileInput = document.querySelector('input[type="file"]');
+    let fileInfo = { data: "", name: "", type: "" };
+
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const base64 = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.readAsDataURL(file);
         });
+        fileInfo = { data: base64, name: file.name, type: file.type };
+    }
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    data.fileData = fileInfo.data;
+    data.fileName = fileInfo.name;
+    data.fileType = fileInfo.type;
+
+    fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(() => {
+        alert("Report Submitted Successfully!");
+        location.reload();
+    })
+    .catch(err => {
+        alert("Error submitting. Check console.");
+        btn.textContent = "Submit Report";
+        btn.disabled = false;
     });
+});
 </script>
 </body>
 </html>
