@@ -525,21 +525,29 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
     function sendData(data) {
     fetch(scriptURL, {
         method: 'POST',
-        mode: 'no-cors', // Palitan ito mula no-cors
+        mode: 'cors', // Siguraduhing 'cors' ito
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     })
-    .then(response => response.json()) // Basahin ang response
-    .then(result => {
+    .then(response => {
+        // I-check kung ok ang response bago i-parse
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.text(); // Gamitin muna .text() imbes na .json() para ma-check kung may laman
+    })
+    .then(text => {
+        console.log("Response mula sa server:", text);
         alert("Report Submitted Successfully!");
         location.reload();
     })
     .catch(err => {
         console.error("Error Details:", err);
-        alert("Error: Check console for details.");
+        alert("Error: Paki-check ang console (F12) para sa detalye.");
         btn.disabled = false;
+        btn.textContent = "Submit Report";
     });
 }
 
