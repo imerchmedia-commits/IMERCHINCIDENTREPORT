@@ -1,111 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incident Report Portal | iMerch Media Inc.</title>
+    <link rel="icon" type="image/png" href="incident.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --gold: #b8860b;
             --red: #ff0000;
+            --bg: #f4f4f4;
+            --white: #ffffff;
+            --text: #333333;
+            --border: #e0e0e0;
+            --input-bg: #ffffff;
         }
-
+        [data-theme="dark"] {
+            --gold: #ffd700;
+            --red: #ff4444;
+            --bg: #1a1a1a;
+            --white: #2d2d2d;
+            --text: #f0f0f0;
+            --border: #444444;
+            --input-bg: #3d3d3d;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: var(--bg);
+            color: var(--text);
             padding: 20px;
             margin: 0;
+            transition: background-color 0.3s, color 0.3s;
         }
-
         .container {
-            max-width: 650px;
+            max-width: 700px;
             margin: 20px auto;
-            background: #ffffff;
+            background: var(--white);
             padding: 30px;
             border-radius: 12px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-
-        .logo-box {
-            text-align: center;
-            margin-bottom: 20px;
+        .hidden { display: none; }
+        .logo-box { text-align: center; margin-bottom: 20px; }
+        .logo-box img { width: 150px; }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--gold);
+            padding: 10px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 1px solid var(--border);
         }
-
-        .logo-box img {
-            width: 150px;
-            height: auto;
-        }
-
         .header {
             text-align: center;
             margin-bottom: 25px;
             border-bottom: 2px solid var(--red);
             padding-bottom: 15px;
         }
-
-        .header h2 {
-            color: var(--gold);
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 1.5rem;
-        }
-
-        #clock-display {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 8px;
-        }
-
-        .form-group {
+        .header h2 { color: var(--gold); margin: 0; text-transform: uppercase; }
+        .user-badge {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 20px;
+            color: #333;
         }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #444;
-        }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .input-with-icon i {
-            position: absolute;
-            left: 12px;
-            top: 14px;
-            color: var(--gold);
-        }
-
+        .user-badge img { width: 30px; height: 30px; border-radius: 50%; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .input-with-icon { position: relative; }
+        .input-with-icon i { position: absolute; left: 12px; top: 14px; color: var(--gold); }
         input, select, textarea {
             width: 100%;
             padding: 12px 12px 12px 40px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--border);
             border-radius: 6px;
             box-sizing: border-box;
-            font-size: 14px;
+            background: var(--input-bg);
+            color: var(--text);
         }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--gold);
-            outline: none;
-            box-shadow: 0 0 5px rgba(184, 134, 11, 0.2);
-        }
-
-        .date-row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .date-row .form-group {
-            flex: 1;
-        }
-
+        .date-row { display: flex; gap: 15px; }
+        .date-row .form-group { flex: 1; }
         .btn-submit {
             width: 100%;
             padding: 14px;
@@ -115,65 +100,102 @@
             border-radius: 6px;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
             font-size: 16px;
         }
-
-        .btn-submit:hover {
-            background: #8b6508;
-        }
-
         .footer-text {
             text-align: center;
             margin-top: 40px;
             font-size: 0.75rem;
             color: #888;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--border);
             padding-top: 20px;
+        }
+        .footer-values {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+            color: var(--gold);
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="logo-box">
-        <img src="YOUR_LOGO_URL_HERE" alt="Company Logo">
+<div class="theme-toggle" onclick="toggleTheme()"><i id="theme-icon" class="fas fa-moon"></i></div>
+
+<div id="loginSection" class="container">
+    <div class="logo-box"><img src="imerch.png" alt="iMerch Logo"></div>
+    <div style="text-align: center;">
+        <h2>Login Access</h2>
+        <div class="input-with-icon" style="max-width: 300px; margin: 20px auto;">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="companyEmail" placeholder="Enter @imerchmedia.net email">
+        </div>
+        <button class="btn-submit" onclick="verifyLogin()" style="max-width: 300px; margin: auto;">Login to Portal</button>
     </div>
-    
+</div>
+
+<div id="reportSection" class="container hidden">
+    <div class="logo-box"><img src="imerch.png" alt="iMerch Logo"></div>
     <div class="header">
         <h2>Incident Report Portal</h2>
-        <div id="clock-display"></div>
     </div>
 
     <form id="incidentForm">
-        <div class="form-group">
-            <label>Category of Offenses</label>
-            <div class="input-with-icon">
-                <i class="fas fa-gavel"></i>
-                <select name="incidentType" id="categorySelect" onchange="updateSpecificOffenses(this.value)" required>
-                    <option value="" disabled selected>Select Category</option>
-                    <option value="Attendance and Punctuality">Attendance and Punctuality</option>
-                    <option value="Work Performance & Duty">Work Performance & Duty</option>
-                    <option value="Offenses Against Authority">Offenses Against Authority</option>
-                    <option value="Offenses Against Persons">Offenses Against Persons</option>
-                    <option value="Offenses Against Company Property & Interests">Offenses Against Company Property & Interests</option>
-                    <option value="Dishonesty">Dishonesty</option>
-                    <option value="Offenses against Public Morals">Offenses against Public Morals</option>
-                    <option value="Offenses Against Health and Safety">Offenses Against Health and Safety</option>
-                </select>
+        <div style="text-align: center;">
+            <div class="user-badge">
+                <img src="https://via.placeholder.com/30" alt="User">
+                <span>Reporter: <b id="userEmailLabel"></b></span>
+            </div>
+        </div>
+        <input type="hidden" name="reporterEmail" id="verifiedReporterEmail">
+        <input type="hidden" name="reportDate" id="reportDate">
+
+        <div class="date-row">
+            <div class="form-group">
+                <label>Reporter Full Name</label>
+                <div class="input-with-icon"><i class="fas fa-user"></i><input type="text" name="fullname" required></div>
+            </div>
+            <div class="form-group">
+                <label>Subject Name</label>
+                <div class="input-with-icon"><i class="fas fa-user-tag"></i><input type="text" name="subjectName" required></div>
+            </div>
+        </div>
+
+        <div class="date-row">
+            <div class="form-group">
+                <label>Location</label>
+                <div class="input-with-icon"><i class="fas fa-map-marker-alt"></i><input type="text" name="location" required></div>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <div class="input-with-icon"><i class="fas fa-gavel"></i>
+                    <select name="incidentType" id="categorySelect" onchange="updateSpecificOffenses(this.value)" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option value="Attendance and Punctuality">Attendance and Punctuality</option>
+                        <option value="Work Performance & Duty">Work Performance & Duty</option>
+                        <option value="Offenses Against Authority">Offenses Against Authority</option>
+                        <option value="Offenses Against Persons">Offenses Against Persons</option>
+                        <option value="Offenses Against Company Property & Interests">Offenses Against Company Property & Interests</option>
+                        <option value="Dishonesty">Dishonesty</option>
+                        <option value="Offenses against Public Morals">Offenses against Public Morals</option>
+                        <option value="Offenses Against Health and Safety">Offenses Against Health and Safety</option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <div class="form-group">
             <label>Specific Violation</label>
-            <div class="input-with-icon">
-                <i class="fas fa-list-ul"></i>
+            <div class="input-with-icon"><i class="fas fa-list-ul"></i>
                 <select name="specificViolation" id="specificViolation" required>
-                    <option value="" disabled selected>Please select a category first</option>
+                    <option value="" disabled selected>Select Category first</option>
                 </select>
             </div>
         </div>
@@ -181,211 +203,225 @@
         <div class="date-row">
             <div class="form-group">
                 <label>Date of Incident</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-calendar-day"></i>
-                    <input type="date" name="incidentDate" required>
-                </div>
+                <div class="input-with-icon"><i class="fas fa-calendar-day"></i><input type="date" name="incidentDate" required></div>
             </div>
             <div class="form-group">
-                <label>Time of Incident</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-clock"></i>
-                    <input type="time" name="time" required>
-                </div>
+                <label>Time</label>
+                <div class="input-with-icon"><i class="fas fa-clock"></i><input type="time" name="time" required></div>
             </div>
         </div>
 
         <div class="form-group">
             <label>Detailed Description</label>
-            <div class="input-with-icon">
-                <i class="fas fa-edit" style="top: 15px;"></i>
-                <textarea name="description" rows="4" placeholder="Provide additional details..." required></textarea>
+            <div class="input-with-icon"><i class="fas fa-edit" style="top: 22px;"></i>
+                <textarea name="description" rows="4" required></textarea>
             </div>
         </div>
 
         <button type="submit" class="btn-submit" id="submitBtn">
-            <span>Submit Report</span>
-            <i class="fas fa-paper-plane"></i>
+            <span>Submit Report</span> <i class="fas fa-paper-plane"></i>
         </button>
     </form>
 
     <div class="footer-text">
         &copy; 2026 iMerch Media Inc. | System Developed By Ron Sarmenta
+        <div class="footer-values">
+            <span><i class="fas fa-heart"></i> Love</span> 
+            <span><i class="fas fa-hands-holding-child"></i> Care</span>
+            <span><i class="fas fa-share-nodes"></i> Share</span> 
+            <span><i class="fas fa-comments"></i> Communicate</span>
+            <span><i class="fas fa-handshake"></i> Trust</span>
+        </div>
     </div>
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxptCQbfcq3CasBWXeHl7k0pq_nqzH0ZmRJHcEddv9e4trp42c2dblrOW-U5wVNFWXQ/exec';
-    
     const offenses = {
         "Attendance and Punctuality": [
-            "1. Failure to time-in and/or time-out on the time record.", 
-            "2. Failure to sign on the time record.", 
-            "3. Loss of time record", 
-            "4. Tardiness – exceeding the grace period of 15 minutes.", 
-            "5. Habitual Tardiness- Three (3) times a month", 
-            "6. Habitual Absences – Two (2) absences in a month (non-medical)", 
-            "7. Absence Without Leave (AWOL) which hampered the operations.", 
-            "8. Absence Without Official Leave of three (3) (non)/consecutive days.", 
-            "9. Failure to report absence or file a leave of absence on date incurred", 
-            "10. Failure to notify superior of absence/ tardiness", 
-            "11. Malingering or pretending to be sick or giving false excuses.", 
-            "12. Tampering or falsifying time record.", 
-            "13. Quitting work before dismissal time or under time without permission.", 
+            "1. Failure to time-in and/or time-out on the time record.",
+            "2. Failure to sign on the time record.",
+            "3. Loss of time record",
+            "4. Tardiness – exceeding the grace period of 15 minutes.",
+            "5. Habitual Tardiness- Three (3) times a month",
+            "6. Habitual Absences – Two (2) absences in a month (non-medical)",
+            "7. Absence Without Leave (AWOL) which hampered the operations.",
+            "8. Absence Without Official Leave of three (3) (non)/consecutive days.",
+            "9. Failure to report absence or file a leave of absence on date incurred",
+            "10. Failure to notify superior of absence/ tardiness",
+            "11. Malingering or pretending to be sick or giving false excuses.",
+            "12. Tampering or falsifying time record.",
+            "13. Quitting work before dismissal time or under time without permission.",
             "14. Failure to attend official company meetings or activities."
         ],
         "Work Performance & Duty": [
-            "1. Failure to perform required work according to company standards.", 
-            "2. Engaging in non-work related activities during official working hours.", 
-            "3. Engaging in unauthorized activities (selling/promoting) within premises.", 
-            "4. Failure to submit required reports on time.", 
-            "5. Submission of incomplete reports.", 
-            "6. Non-submission of reports as required by superior.", 
-            "7. Deviation of work schedule without prior approval.", 
-            "8. Failure to answer communications (email, SMS, calls) within the day.", 
-            "9. Failure to observe established SOPs in equipment or service.", 
-            "10. Failure to observe and implement health and safety measures.", 
-            "11. Gross negligence in general.", 
-            "12. Gross Negligence causing serious damage to company or client.", 
-            "13. Failure to pull-out expired products in the selling area.", 
-            "14. Reporting for work under influence of liquor or drugs.", 
-            "15. Drinking liquor while on duty.", 
-            "16. Engaging in or holding unofficial/unauthorized meetings.", 
-            "17. Loafing or wasting time, prolonging rest periods.", 
-            "18. Loitering, sleeping, or napping during official working hours.", 
-            "19. Gambling within office or work premises.", 
-            "20. Engaging in horseplay, making excessive noise within premises.", 
-            "21. Leaving place of work within working hours without permission.", 
-            "22. Failure to immediately report a personnel injury on Company time.", 
-            "23. Failure to notify HR of personal data changes within 7 days.", 
-            "24. Causing loss of time or money to company because of negligence.", 
-            "25. Use of company equipment for social networking or games.", 
-            "26. Installing unauthorized and unlicensed software in company computers.", 
+            "1. Failure to perform required work according to company standards.",
+            "2. Engaging in non-work related activities during official working hours.",
+            "3. Engaging in unauthorized activities (selling/promoting) within premises.",
+            "4. Failure to submit required reports on time.",
+            "5. Submission of incomplete reports.",
+            "6. Non-submission of reports as required by superior.",
+            "7. Deviation of work schedule without prior approval.",
+            "8. Failure to answer communications (email, SMS, calls) within the day.",
+            "9. Failure to observe established SOPs in equipment or service.",
+            "10. Failure to observe and implement health and safety measures.",
+            "11. Gross negligence in general.",
+            "12. Gross Negligence causing serious damage to company or client.",
+            "13. Failure to pull-out expired products in the selling area.",
+            "14. Reporting for work under influence of liquor or drugs.",
+            "15. Drinking liquor while on duty.",
+            "16. Engaging in or holding unofficial/unauthorized meetings.",
+            "17. Loafing or wasting time, prolonging rest periods.",
+            "18. Loitering, sleeping, or napping during official working hours.",
+            "19. Gambling within office or work premises.",
+            "20. Engaging in horseplay, making excessive noise within premises.",
+            "21. Leaving place of work within working hours without permission.",
+            "22. Failure to immediately report a personnel injury on Company time.",
+            "23. Failure to notify HR of personal data changes within 7 days.",
+            "24. Causing loss of time or money to company because of negligence.",
+            "25. Use of company equipment for social networking or games.",
+            "26. Installing unauthorized and unlicensed software in company computers.",
             "27. Offering or accepting anything of value for job assignment."
         ],
         "Offenses Against Authority": [
-            "1. Failure to report for overtime work after having agreed to do so.", 
-            "2. Failure to follow directives/instructions from company authorities.", 
-            "3. Any act constituting disrespect or contempt for company authorities.", 
-            "4. Threat or intimidation against a Company authority with intent to harm.", 
-            "5. Willfully holding back, slowing down, or hindering work output.", 
-            "6. Refusing to accept or carry out official assignments from superiors.", 
-            "7. Insubordination in general.", 
-            "8. Refusing to cooperate with company officials in investigations.", 
-            "9. Grave abuse of authority by instructing subordinates to act against policy.", 
+            "1. Failure to report for overtime work after having agreed to do so.",
+            "2. Failure to follow directives/instructions from company authorities.",
+            "3. Any act constituting disrespect or contempt for company authorities.",
+            "4. Threat or intimidation against a Company authority with intent to harm.",
+            "5. Willfully holding back, slowing down, or hindering work output.",
+            "6. Refusing to accept or carry out official assignments from superiors.",
+            "7. Insubordination in general.",
+            "8. Refusing to cooperate with company officials in investigations.",
+            "9. Grave abuse of authority by instructing subordinates to act against policy.",
             "10. Performing acts/transactions binding the Company without authority."
         ],
         "Offenses Against Persons": [
-            "1. Inciting/provoking a fight or causing bodily harm/injury.", 
-            "2. Threat, intimidation, or coercion against fellow employees.", 
-            "3. Using profane/obscene words or insulting dignity of others.", 
-            "4. Lending or borrowing money from co-workers.", 
-            "5. Stealing or attempt to steal from co-workers.", 
-            "6. Sexual harassment on co-workers/clients/suppliers.", 
-            "7. Giving false accusations or testimony against others.", 
-            "8. Engaging in gossips about fellow employees.", 
-            "9. Bashing or bullying co-workers.", 
-            "10. Spreading offensive material via mobile/internet to degrade a person.", 
-            "11. Grossly scandalous or indecent language in addressing customers.", 
-            "12. Discourteous acts or grave threats towards customers/clients.", 
-            "13. Any and all immoral acts including sexual harassment of customers.", 
-            "14. Making false, vicious, or malicious statements concerning customers.", 
+            "1. Inciting/provoking a fight or causing bodily harm/injury.",
+            "2. Threat, intimidation, or coercion against fellow employees.",
+            "3. Using profane/obscene words or insulting dignity of others.",
+            "4. Lending or borrowing money from co-workers.",
+            "5. Stealing or attempt to steal from co-workers.",
+            "6. Sexual harassment on co-workers/clients/suppliers.",
+            "7. Giving false accusations or testimony against others.",
+            "8. Engaging in gossips about fellow employees.",
+            "9. Bashing or bullying co-workers.",
+            "10. Spreading offensive material via mobile/internet to degrade a person.",
+            "11. Grossly scandalous or indecent language in addressing customers.",
+            "12. Discourteous acts or grave threats towards customers/clients.",
+            "13. Any and all immoral acts including sexual harassment of customers.",
+            "14. Making false, vicious, or malicious statements concerning customers.",
             "15. Offense against honor (libel, defamation, slander) against customers."
         ],
         "Offenses Against Company Property & Interests": [
-            "1. Failure to comply with procedures in operation of machines/equipment.", 
-            "2. Using company property or tools without permission or authority.", 
-            "3. Defacing company fixture/logo, vandalism, or dirtying of walls.", 
-            "4. Destruction, damage or misuse of property through carelessness.", 
-            "5. Theft, robbery or appropriation of property for personal gain.", 
-            "6. Malversation, misappropriation or unauthorized disbursement of funds.", 
-            "7. Pilferage of company property or products of clients.", 
-            "8. Engaging in unauthorized sale of property for personal benefit.", 
-            "9. Swindling (estafa) or taking (theft) of company funds or property.", 
-            "10. Using company time/materials/equipment for unauthorized work.", 
-            "11. Substituting company materials/equipment with poorer quality ones.", 
-            "12. Unauthorized alteration or removal of property from premises.", 
-            "13. Misrepresentation or unauthorized transactions using company name.", 
-            "14. Using mobile/internet to spread material that damages reputation.", 
-            "15. Disclosure or release of company/client confidential information.", 
-            "16. Willful concealment of material information concerning company interest.", 
+            "1. Failure to comply with procedures in operation of machines/equipment.",
+            "2. Using company property or tools without permission or authority.",
+            "3. Defacing company fixture/logo, vandalism, or dirtying of walls.",
+            "4. Destruction, damage or misuse of property through carelessness.",
+            "5. Theft, robbery or appropriation of property for personal gain.",
+            "6. Malversation, misappropriation or unauthorized disbursement of funds.",
+            "7. Pilferage of company property or products of clients.",
+            "8. Engaging in unauthorized sale of property for personal benefit.",
+            "9. Swindling (estafa) or taking (theft) of company funds or property.",
+            "10. Using company time/materials/equipment for unauthorized work.",
+            "11. Substituting company materials/equipment with poorer quality ones.",
+            "12. Unauthorized alteration or removal of property from premises.",
+            "13. Misrepresentation or unauthorized transactions using company name.",
+            "14. Using mobile/internet to spread material that damages reputation.",
+            "15. Disclosure or release of company/client confidential information.",
+            "16. Willful concealment of material information concerning company interest.",
             "17. Unauthorized opening, removal, or destruction of documents/records."
         ],
         "Dishonesty": [
-            "1. Giving false testimony during investigation or fact-finding process.", 
-            "2. Giving false information in general.", 
-            "3. Tampering job cards or making false reports on work (time padding).", 
-            "4. Conniving with subordinates in falsifying any documents.", 
-            "5. Falsification or misrepresentation of personal records for employment.", 
-            "6. Attempt to falsify or pad travel expenses, receipts, or invoices.", 
-            "7. Falsifying any written statement or making misleading information.", 
-            "8. Forgery.", 
-            "9. Engaging or conniving in anomalous transactions.", 
-            "10. Bribery or offering/accepting anything of value for job assignment.", 
-            "11. Favoring suppliers/customers in consideration of kickbacks.", 
-            "12. Intentionally punching or writing on timecard of another employee.", 
+            "1. Giving false testimony during investigation or fact-finding process.",
+            "2. Giving false information in general.",
+            "3. Tampering job cards or making false reports on work (time padding).",
+            "4. Conniving with subordinates in falsifying any documents.",
+            "5. Falsification or misrepresentation of personal records for employment.",
+            "6. Attempt to falsify or pad travel expenses, receipts, or invoices.",
+            "7. Falsifying any written statement or making misleading information.",
+            "8. Forgery.",
+            "9. Engaging or conniving in anomalous transactions.",
+            "10. Bribery or offering/accepting anything of value for job assignment.",
+            "11. Favoring suppliers/customers in consideration of kickbacks.",
+            "12. Intentionally punching or writing on timecard of another employee.",
             "13. Falsifying Personnel or Company Records."
         ],
         "Offenses against Public Morals": [
-            "1. Showing or exhibiting pornographic materials, pictures or literature.", 
-            "2. Conduct of grossly scandalous or indecent language within premises.", 
-            "3. Showing discourteous acts towards co-employees, suppliers, or customers.", 
-            "4. Direct involvement in any scandal or crime.", 
-            "5. Sexual harassment of male or female employees/clients/suppliers.", 
-            "6. Carrying deadly weapons or any prohibited drugs.", 
+            "1. Showing or exhibiting pornographic materials, pictures or literature.",
+            "2. Conduct of grossly scandalous or indecent language within premises.",
+            "3. Showing discourteous acts towards co-employees, suppliers, or customers.",
+            "4. Direct involvement in any scandal or crime.",
+            "5. Sexual harassment of male or female employees/clients/suppliers.",
+            "6. Carrying deadly weapons or any prohibited drugs.",
             "7. Direct involvement/connivance with a criminal organization."
         ],
         "Offenses Against Health and Safety": [
-            "1. Disregard of company directives relating to sanitary conditions.", 
-            "2. Refusal or failure to follow safety rules.", 
-            "3. Refusal or failure to submit oneself to a Medical Examination.", 
-            "4. Reporting for work having serious contagious disease without reporting.", 
-            "5. Failure to shut down or unplug electrical equipment before leaving.", 
-            "6. Failure to clean assigned working areas to promote good hygiene.", 
-            "7. Failure to report damaged equipment or furniture.", 
+            "1. Disregard of company directives relating to sanitary conditions.",
+            "2. Refusal or failure to follow safety rules.",
+            "3. Refusal or failure to submit oneself to a Medical Examination.",
+            "4. Reporting for work having serious contagious disease without reporting.",
+            "5. Failure to shut down or unplug electrical equipment before leaving.",
+            "6. Failure to clean assigned working areas to promote good hygiene.",
+            "7. Failure to report damaged equipment or furniture.",
             "8. Failure to immediately report an accident or injury involving personnel."
         ]
     };
 
-    function updateSpecificOffenses(category) {
-        const vSelect = document.getElementById('specificViolation');
-        vSelect.innerHTML = '<option value="" disabled selected>Select Violation</option>';
-        if (offenses[category]) {
-            offenses[category].forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item;
-                opt.textContent = item;
-                vSelect.appendChild(opt);
+    function verifyLogin() {
+        const email = document.getElementById('companyEmail').value;
+        if (email.endsWith('@imerchmedia.net')) {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('reportSection').classList.remove('hidden');
+            document.getElementById('userEmailLabel').textContent = email;
+            document.getElementById('verifiedReporterEmail').value = email;
+            document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
+        } else {
+            alert("Access Denied: Only @imerchmedia.net allowed.");
+        }
+    }
+
+    function updateSpecificOffenses(cat) {
+        const sel = document.getElementById('specificViolation');
+        sel.innerHTML = '<option value="" disabled selected>Select Violation</option>';
+        if (offenses[cat]) {
+            offenses[cat].forEach(i => {
+                const o = document.createElement('option');
+                o.value = i;
+                o.textContent = i;
+                sel.appendChild(o);
             });
         }
     }
 
-    function updateTime() {
-        document.getElementById('clock-display').textContent = new Date().toLocaleString('en-US', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-        });
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        const isDark = body.getAttribute('data-theme') === 'dark';
+        
+        if (isDark) {
+            body.setAttribute('data-theme', 'light');
+            icon.className = 'fas fa-moon';
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            icon.className = 'fas fa-sun';
+        }
     }
-
-    setInterval(updateTime, 1000); 
-    updateTime();
 
     document.getElementById('incidentForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.textContent = "Submitting...";
         
-        fetch(scriptURL, { 
-            method: 'POST', 
-            body: new FormData(this) 
+        fetch("https://script.google.com/macros/s/AKfycbz4x-i8LLRU9yseLIUiOIeapc5kdqluj0lOpKQ8xXiZndUmW4Tsp8t1ZA3RNTF8F39e/exec", {
+            method: 'POST',
+            body: new FormData(this)
         })
-        .then(() => { 
-            alert("Report submitted successfully!"); 
-            location.reload(); 
+        .then(() => {
+            alert("Report Submitted Successfully!");
+            location.reload();
         })
-        .catch(error => { 
-            console.error(error); 
-            alert("Error submitting report."); 
+        .catch(err => {
+            alert("Error submitting report. Please check your connection.");
+            btn.textContent = "Submit Report";
         });
     });
 </script>
