@@ -6,140 +6,117 @@
     <title>iMerch | Incident Report Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #004aad; --accent: #ff914d; --bg: #f4f7f6; --text: #2c3e50; --card: #ffffff; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; transition: 0.3s; }
-        .container { max-width: 650px; margin: auto; background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        :root { --gold: #b8860b; --red: #ff0000; --black: #1a1a1a; --white: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #000; color: #fff; padding: 20px; }
+        .container { max-width: 650px; margin: auto; background: var(--black); padding: 30px; border-radius: 15px; border: 1px solid var(--gold); box-shadow: 0 0 20px rgba(184, 134, 11, 0.2); }
+        .logo { width: 100px; display: block; margin: 0 auto 20px; }
+        .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--red); padding-bottom: 10px; }
+        .header h2 { color: var(--gold); margin: 0; }
         .hidden { display: none; }
-        .header { text-align: center; margin-bottom: 25px; }
-        .user-badge { background: #f0f4ff; color: var(--primary); padding: 10px 20px; border-radius: 30px; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .user-badge { background: #333; color: var(--gold); padding: 10px 20px; border-radius: 30px; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px; border: 1px solid var(--gold); }
         .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.85rem; }
-        .input-with-icon { position: relative; }
-        .input-with-icon i { position: absolute; left: 15px; top: 14px; color: var(--primary); }
-        input, select, textarea { width: 100%; padding: 12px 12px 12px 40px; border: 2px solid #e1e1e1; border-radius: 10px; box-sizing: border-box; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--gold); font-size: 0.85rem; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #444; border-radius: 5px; background: #000; color: #fff; box-sizing: border-box; }
         .date-row { display: flex; gap: 15px; }
         .date-row .form-group { flex: 1; }
-        .btn-submit { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
-        .footer-text { text-align: center; margin-top: 30px; font-size: 0.75rem; color: #888; }
-        .footer-values { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        .btn-submit { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .btn-submit:hover { background: var(--red); color: #fff; }
+        .footer-text { text-align: center; margin-top: 30px; font-size: 0.75rem; color: #888; border-top: 1px solid #333; padding-top: 15px; }
+        .footer-values { display: flex; justify-content: center; gap: 15px; margin-top: 10px; flex-wrap: wrap; color: var(--gold); }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- LOGO PLACEHOLDER -->
+    <img src="https://via.placeholder.com/100" alt="Company Logo" class="logo">
+
+    <!-- LOGIN SECTION -->
     <div id="loginSection">
         <div class="header">
-            <h2>Incident Report Portal</h2>
-            <p>Please login with your @imerchmedia.net email</p>
+            <h2>Portal Login</h2>
         </div>
         <div class="form-group">
-            <div class="input-with-icon">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="emailInput" placeholder="employee@imerchmedia.net">
-            </div>
+            <label>Employee Email (@imerchmedia.net)</label>
+            <input type="email" id="emailInput" placeholder="employee@imerchmedia.net">
         </div>
-        <button class="btn-submit" onclick="validateLogin()">Login to Access</button>
+        <button class="btn-submit" onclick="validateLogin()">Login to Report</button>
     </div>
 
+    <!-- FORM SECTION -->
     <div id="formSection" class="hidden">
         <div class="header">
             <h2>Incident Report Portal</h2>
-            <div id="clock-display"></div>
         </div>
 
         <form id="incidentForm">
             <input type="hidden" name="reporterEmail" id="verifiedReporterEmail">
-            <input type="hidden" name="reportDate" id="reportDate">
-
+            
             <div style="text-align: center;">
                 <div class="user-badge">
                     <i class="fas fa-user-circle"></i>
-                    <span>Active Reporter: <b id="userEmailLabel"></b></span>
+                    <span>Reporter: <b id="userEmailLabel"></b></span>
                 </div>
             </div>
 
             <div class="date-row">
                 <div class="form-group">
                     <label>Reporter Full Name</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" name="fullname" placeholder="Your name" required>
-                    </div>
+                    <input type="text" name="fullname" placeholder="Your name" required>
                 </div>
                 <div class="form-group">
                     <label>Subject Name</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-user-tag"></i>
-                        <input type="text" name="subjectName" placeholder="Name of person involved" required>
-                    </div>
+                    <input type="text" name="subjectName" placeholder="Name of person involved" required>
                 </div>
             </div>
 
             <div class="date-row">
                 <div class="form-group">
                     <label>Location of Incident</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <input type="text" name="location" placeholder="Where it happened" required>
-                    </div>
+                    <input type="text" name="location" placeholder="Where it happened" required>
                 </div>
                 <div class="form-group">
                     <label>Category of Offenses</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-gavel"></i>
-                        <select name="incidentType" id="categorySelect" onchange="updateSpecificOffenses(this.value)" required>
-                            <option value="" disabled selected>Select Category</option>
-                            <option value="Attendance and Punctuality">Attendance and Punctuality</option>
-                            <option value="Work Performance & Duty">Work Performance & Duty</option>
-                            <option value="Offenses Against Authority">Offenses Against Authority</option>
-                            <option value="Offenses Against Persons">Offenses Against Persons</option>
-                            <option value="Offenses Against Company Property & Interests">Offenses Against Company Property & Interests</option>
-                            <option value="Dishonesty">Dishonesty</option>
-                            <option value="Offenses against Public Morals">Offenses against Public Morals</option>
-                            <option value="Offenses Against Health and Safety">Offenses Against Health and Safety</option>
-                        </select>
-                    </div>
+                    <select name="incidentType" id="categorySelect" onchange="updateSpecificOffenses(this.value)" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option value="Attendance and Punctuality">Attendance and Punctuality</option>
+                        <option value="Work Performance & Duty">Work Performance & Duty</option>
+                        <option value="Offenses Against Authority">Offenses Against Authority</option>
+                        <option value="Offenses Against Persons">Offenses Against Persons</option>
+                        <option value="Offenses Against Company Property & Interests">Offenses Against Company Property & Interests</option>
+                        <option value="Dishonesty">Dishonesty</option>
+                        <option value="Offenses against Public Morals">Offenses against Public Morals</option>
+                        <option value="Offenses Against Health and Safety">Offenses Against Health and Safety</option>
+                    </select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Specific Violation</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-list-ul"></i>
-                    <select name="specificViolation" id="specificViolation" required>
-                        <option value="" disabled selected>Select Category first</option>
-                    </select>
-                </div>
+                <select name="specificViolation" id="specificViolation" required>
+                    <option value="" disabled selected>Please select a category first</option>
+                </select>
             </div>
 
             <div class="date-row">
                 <div class="form-group">
                     <label>Date of Incident</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-calendar-day"></i>
-                        <input type="date" name="incidentDate" required>
-                    </div>
+                    <input type="date" name="incidentDate" required>
                 </div>
                 <div class="form-group">
                     <label>Time of Incident</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-clock"></i>
-                        <input type="time" name="time" required>
-                    </div>
+                    <input type="time" name="time" required>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label>Evidence (Attachment)</label>
+                <input type="file" name="file">
             </div>
 
             <div class="form-group">
                 <label>Detailed Description</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-edit" style="top: 15px;"></i>
-                    <textarea name="description" rows="4" style="padding-top:10px;" placeholder="Provide additional details..." required></textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Attach Evidence</label>
-                <input type="file" name="file" style="padding-left:12px;">
+                <textarea name="description" rows="4" placeholder="Provide additional details..." required></textarea>
             </div>
 
             <button type="submit" class="btn-submit" id="submitBtn">Submit Report</button>
@@ -149,11 +126,7 @@
     <div class="footer-text">
         &copy; 2026 iMerch Media Inc. | Developed By Ron Sarmenta
         <div class="footer-values">
-            <span><i class="fas fa-heart"></i> Love</span>
-            <span><i class="fas fa-hands-holding-child"></i> Care</span>
-            <span><i class="fas fa-share-alt"></i> Share</span>
-            <span><i class="fas fa-comments"></i> Communicate</span>
-            <span><i class="fas fa-shield-alt"></i> Trust</span>
+            <span>LOVE</span> <span>CARE</span> <span>SHARE</span> <span>COMMUNICATE</span> <span>TRUST</span>
         </div>
     </div>
 </div>
@@ -179,7 +152,6 @@
             document.getElementById('formSection').classList.remove('hidden');
             document.getElementById('userEmailLabel').textContent = email;
             document.getElementById('verifiedReporterEmail').value = email;
-            document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
         } else {
             alert('Access Denied: Please use a valid iMerch email.');
         }
@@ -194,18 +166,13 @@
         });
     }
 
-    function updateTime() {
-        document.getElementById('clock-display').textContent = new Date().toLocaleString();
-    }
-    setInterval(updateTime, 1000); updateTime();
-
     document.getElementById('incidentForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.textContent = "Submitting...";
         fetch(scriptURL, { method: 'POST', body: new FormData(this) })
             .then(() => { alert("Report submitted successfully!"); location.reload(); })
-            .catch(error => alert("Error!"));
+            .catch(error => alert("Error: " + error));
     });
 </script>
 </body>
