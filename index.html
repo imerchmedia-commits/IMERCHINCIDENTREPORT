@@ -50,6 +50,9 @@
         </div>
 
         <form id="incidentForm">
+            <input type="hidden" name="reporterEmail" id="verifiedReporterEmail">
+            <input type="hidden" name="reportDate" id="reportDate">
+
             <div style="text-align: center;">
                 <div class="user-badge">
                     <i class="fas fa-user-circle"></i>
@@ -57,83 +60,47 @@
                 </div>
             </div>
 
-            <input type="hidden" name="reporterEmail" id="verifiedReporterEmail">
-            <input type="hidden" name="reportDate" id="reportDate">
-
             <div class="date-row">
                 <div class="form-group">
                     <label>Reporter Full Name</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" name="fullname" placeholder="Your name" required>
-                    </div>
+                    <input type="text" name="fullname" placeholder="Your name" required style="padding-left:12px;">
                 </div>
                 <div class="form-group">
                     <label>Subject Name</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-user-tag"></i>
-                        <input type="text" name="subjectName" placeholder="Name of person involved" required>
-                    </div>
+                    <input type="text" name="subjectName" placeholder="Name of person involved" required style="padding-left:12px;">
                 </div>
             </div>
 
-            <div class="date-row">
-                <div class="form-group">
-                    <label>Location of Incident</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <input type="text" name="location" placeholder="Where it happened" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Category of Offenses</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-gavel"></i>
-                        <select name="incidentType" id="categorySelect" onchange="updateSpecificOffenses(this.value)" required>
-                            <option value="" disabled selected>Select Category</option>
-                            <option value="Attendance and Punctuality">Attendance and Punctuality</option>
-                            <option value="Work Performance & Duty">Work Performance & Duty</option>
-                            <option value="Offenses Against Authority">Offenses Against Authority</option>
-                            <option value="Offenses Against Persons">Offenses Against Persons</option>
-                            <option value="Offenses Against Company Property & Interests">Offenses Against Company Property & Interests</option>
-                            <option value="Dishonesty">Dishonesty</option>
-                            <option value="Offenses against Public Morals">Offenses against Public Morals</option>
-                            <option value="Offenses Against Health and Safety">Offenses Against Health and Safety</option>
-                        </select>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select name="incidentType" id="categorySelect" onchange="updateSpecificOffenses(this.value)" required style="padding-left:12px;">
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="Attendance and Punctuality">Attendance and Punctuality</option>
+                    <option value="Work Performance & Duty">Work Performance & Duty</option>
+                    <option value="Offenses Against Authority">Offenses Against Authority</option>
+                    <option value="Offenses Against Persons">Offenses Against Persons</option>
+                    <option value="Offenses Against Company Property & Interests">Offenses Against Company Property & Interests</option>
+                    <option value="Dishonesty">Dishonesty</option>
+                    <option value="Offenses against Public Morals">Offenses against Public Morals</option>
+                    <option value="Offenses Against Health and Safety">Offenses Against Health and Safety</option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label>Specific Violation</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-list-ul"></i>
-                    <select name="specificViolation" id="specificViolation" required>
-                        <option value="" disabled selected>Please select a category first</option>
-                    </select>
-                </div>
+                <select name="specificViolation" id="specificViolation" required style="padding-left:12px;">
+                    <option value="" disabled selected>Please select a category first</option>
+                </select>
             </div>
 
-            <div class="date-row">
-                <div class="form-group">
-                    <label>Date of Incident</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-calendar-day"></i>
-                        <input type="date" name="incidentDate" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Time of Incident</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-clock"></i>
-                        <input type="time" name="time" required>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label>Attachments (Evidence)</label>
+                <input type="file" name="file" style="padding-left:12px;">
             </div>
 
             <div class="form-group">
                 <label>Detailed Description</label>
-                <textarea name="description" rows="4" style="padding-left:12px; width:100%; border:2px solid #e1e1e1; border-radius:10px;" placeholder="Provide additional details..." required></textarea>
+                <textarea name="description" rows="4" style="padding-left:12px; width:100%; border:2px solid #e1e1e1; border-radius:10px;" required></textarea>
             </div>
 
             <button type="submit" class="btn-submit" id="submitBtn">Submit Report</button>
@@ -153,7 +120,8 @@
 </div>
 
 <script>
-    // Offenses Data
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxptCQbfcq3CasBWXeHl7k0pq_nqzH0ZmRJHcEddv9e4trp42c2dblrOW-U5wVNFWXQ/exec';
+    
     const offenses = {
         "Attendance and Punctuality": ["Failure to time-in/out", "Tardiness", "Habitual Absences", "AWOL"],
         "Work Performance & Duty": ["Poor performance", "SOP violation", "Negligence", "Loafing", "Sleeping"],
@@ -187,10 +155,15 @@
         });
     }
 
-    function updateTime() {
-        document.getElementById('clock-display').textContent = new Date().toLocaleString();
-    }
-    setInterval(updateTime, 1000); updateTime();
+    document.getElementById('incidentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.textContent = "Submitting...";
+        
+        fetch(scriptURL, { method: 'POST', body: new FormData(this) })
+            .then(() => { alert("Report submitted successfully!"); location.reload(); })
+            .catch(error => alert("Error!"));
+    });
 </script>
 </body>
 </html>
