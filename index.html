@@ -510,16 +510,18 @@
     }
 
     // Submit Handler
-    document.getElementById('incidentForm').addEventListener('submit', function(e) {
+document.getElementById('incidentForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
-    // Kunin ang form element
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = "Submitting...";
+    btn.disabled = true;
+
     const form = e.target;
     const file = form.querySelector('input[type="file"]').files[0];
     const reader = new FileReader();
 
+    // Dito natin ilalagay ang logic para siguradong may value
     reader.onload = function(event) {
-        // Gumawa ng object na may laman
         const formData = {
             reporterEmail: form.reporterEmail.value,
             fullname: form.fullname.value,
@@ -530,25 +532,32 @@
             incidentDate: form.incidentDate.value,
             time: form.time.value,
             description: form.description.value,
-            fileData: event.target.result ? event.target.result.split(',')[1] : "",
+            fileData: file ? event.target.result.split(',')[1] : "",
             fileName: file ? file.name : "",
             fileType: file ? file.type : ""
         };
 
         fetch(scriptURL, {
             method: 'POST',
+            mode: 'no-cors', // Mahalaga ito para sa Google Apps Script
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
         })
         .then(() => {
             alert("Report Submitted Successfully!");
             location.reload();
+        })
+        .catch(err => {
+            alert("Error: " + err);
+            btn.disabled = false;
         });
     };
 
     if (file) {
         reader.readAsDataURL(file);
     } else {
-        reader.onload({target: {result: ","}}); // Trigger kahit walang file
+        // Kapag walang file, diretso sa JSON creation
+        reader.onload({ target: { result: "," } });
     }
 });
 </script>
