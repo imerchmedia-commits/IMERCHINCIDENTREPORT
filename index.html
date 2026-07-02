@@ -467,16 +467,20 @@
 
     // Helper Functions
     function verifyLogin() {
-        const email = document.getElementById('companyEmail').value;
-        if (email.endsWith('@imerchmedia.net')) {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('reportSection').classList.remove('hidden');
-            document.getElementById('userEmailLabel').textContent = email;
-            document.getElementById('verifiedReporterEmail').value = email;
-        } else {
-            alert("Access Denied: Only @imerchmedia.net allowed.");
-        }
+    const emailInput = document.getElementById('companyEmail');
+    const email = emailInput.value;
+    
+    if (email.endsWith('@imerchmedia.net')) {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('reportSection').classList.remove('hidden');
+        
+        // Dito natin ilalagay ang value sa hidden input sa loob ng form
+        document.getElementById('userEmailLabel').textContent = email;
+        document.getElementById('verifiedReporterEmail').value = email; 
+    } else {
+        alert("Access Denied: Only @imerchmedia.net allowed.");
     }
+}
 
     function updateSpecificOffenses(cat) {
         const sel = document.getElementById('specificViolation');
@@ -506,46 +510,46 @@
     }
 
     // Submit Handler
-    document.getElementById('incidentForm').addEventListener('submit', async function(e) {
+    document.getElementById('incidentForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.textContent = "Uploading...";
-    btn.disabled = true;
+    
+    // Kunin ang form element
+    const form = e.target;
+    const file = form.querySelector('input[type="file"]').files[0];
+    const reader = new FileReader();
 
-    const fileInput = document.querySelector('input[type="file"]');
-    let fileInfo = { data: "", name: "", type: "" };
+    reader.onload = function(event) {
+        // Gumawa ng object na may laman
+        const formData = {
+            reporterEmail: form.reporterEmail.value,
+            fullname: form.fullname.value,
+            subjectName: form.subjectName.value,
+            location: form.location.value,
+            incidentType: form.incidentType.value,
+            specificViolation: form.specificViolation.value,
+            incidentDate: form.incidentDate.value,
+            time: form.time.value,
+            description: form.description.value,
+            fileData: event.target.result ? event.target.result.split(',')[1] : "",
+            fileName: file ? file.name : "",
+            fileType: file ? file.type : ""
+        };
 
-    if (fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        const base64 = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-            reader.readAsDataURL(file);
+        fetch(scriptURL, {
+            method: 'POST',
+            body: JSON.stringify(formData)
+        })
+        .then(() => {
+            alert("Report Submitted Successfully!");
+            location.reload();
         });
-        fileInfo = { data: base64, name: file.name, type: file.type };
+    };
+
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        reader.onload({target: {result: ","}}); // Trigger kahit walang file
     }
-
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
-    data.fileData = fileInfo.data;
-    data.fileName = fileInfo.name;
-    data.fileType = fileInfo.type;
-
-    fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(() => {
-        alert("Report Submitted Successfully!");
-        location.reload();
-    })
-    .catch(err => {
-        alert("Error submitting. Check console.");
-        btn.textContent = "Submit Report";
-        btn.disabled = false;
-    });
 });
 </script>
 </body>
