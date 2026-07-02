@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="incident.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* CSS Root Variables */
         :root {
             --gold: #b8860b;
             --red: #ff0000;
@@ -27,6 +28,7 @@
             --input-bg: #3d3d3d;
         }
 
+        /* Body Styles */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
@@ -36,6 +38,7 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
+        /* Container Styles */
         .container {
             max-width: 700px;
             margin: 20px auto;
@@ -59,6 +62,7 @@
             width: 150px;
         }
 
+        /* Toggle Button */
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -72,6 +76,7 @@
             border: 1px solid var(--border);
         }
 
+        /* Header Styling */
         .header {
             text-align: center;
             margin-bottom: 25px;
@@ -96,6 +101,7 @@
             font-weight: 600;
         }
 
+        /* Form Grouping */
         .form-group {
             margin-bottom: 20px;
         }
@@ -117,6 +123,7 @@
             color: var(--gold);
         }
 
+        /* Input Styling */
         input, select, textarea {
             width: 100%;
             padding: 12px 12px 12px 40px;
@@ -136,6 +143,7 @@
             flex: 1;
         }
 
+        /* Submit Button */
         .btn-submit {
             width: 100%;
             padding: 14px;
@@ -152,6 +160,7 @@
             font-size: 16px;
         }
 
+        /* Footer */
         .footer-text {
             text-align: center;
             margin-top: 40px;
@@ -218,7 +227,6 @@
             </div>
         </div>
         <input type="hidden" name="reporterEmail" id="verifiedReporterEmail">
-        <input type="hidden" name="reportDate" id="reportDate">
 
         <div class="date-row">
             <div class="form-group">
@@ -317,6 +325,10 @@
 </div>
 
 <script>
+    // Configuration
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxptCQbfcq3CasBWXeHl7k0pq_nqzH0ZmRJHcEddv9e4trp42c2dblrOW-U5wVNFWXQ/exec";
+
+    // Offenses Data Object
     const offenses = {
         "Attendance and Punctuality": [
             "1. Failure to time-in and/or time-out on the time record.",
@@ -447,6 +459,7 @@
         ]
     };
 
+    // Helper Functions
     function verifyLogin() {
         const email = document.getElementById('companyEmail').value;
         if (email.endsWith('@imerchmedia.net')) {
@@ -454,7 +467,6 @@
             document.getElementById('reportSection').classList.remove('hidden');
             document.getElementById('userEmailLabel').textContent = email;
             document.getElementById('verifiedReporterEmail').value = email;
-            document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
         } else {
             alert("Access Denied: Only @imerchmedia.net allowed.");
         }
@@ -487,12 +499,13 @@
         }
     }
 
+    // Submit Handler
     document.getElementById('incidentForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.textContent = "Submitting...";
         
-        fetch("https://script.google.com/macros/s/AKfycbz4x-i8LLRU9yseLIUiOIeapc5kdqluj0lOpKQ8xXiZndUmW4Tsp8t1ZA3RNTF8F39e/exec", {
+        fetch(scriptURL, {
             method: 'POST',
             body: new FormData(this)
         })
