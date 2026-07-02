@@ -549,13 +549,6 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
         btn.textContent = "Submit Report";
     });
 }
-    .catch(err => {
-        console.error("Error Details:", err);
-        alert("Error: Paki-check ang console (F12) para sa detalye.");
-        btn.disabled = false;
-        btn.textContent = "Submit Report";
-    });
-}
 
     // Common data
     const formData = {
