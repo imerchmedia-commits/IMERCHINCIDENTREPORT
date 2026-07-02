@@ -510,6 +510,7 @@
     }
 
 // Submit Handler
+// Submit Handler
 document.getElementById('incidentForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
@@ -517,29 +518,16 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
     btn.disabled = true;
 
     const form = e.target;
-    const file = form.querySelector('input[type="file"]').files[0];
-    const reader = new FileReader();
+    const fileInput = form.querySelector('input[type="file"]');
+    const file = fileInput.files[0];
 
-    reader.onload = function(event) {
-        const formData = {
-            reporterEmail: form.reporterEmail.value,
-            fullname: form.fullname.value,
-            subjectName: form.subjectName.value,
-            location: form.location.value,
-            incidentType: form.incidentType.value,
-            specificViolation: form.specificViolation.value,
-            incidentDate: form.incidentDate.value,
-            time: form.time.value,
-            description: form.description.value,
-            fileData: file ? event.target.result.split(',')[1] : "",
-            fileName: file ? file.name : "",
-            fileType: file ? file.type : ""
-        };
-
+    // Function para ipadala ang data sa Apps Script
+    function sendData(data) {
         fetch(scriptURL, {
             method: 'POST',
-            mode: 'no-cors', // Mahalaga ito para sa Google Apps Script
-            body: JSON.stringify(formData)
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         })
         .then(() => {
             alert("Report Submitted Successfully!");
@@ -551,12 +539,33 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
             btn.disabled = false;
             btn.textContent = "Submit Report";
         });
-    }; // <--- Heto ang kulang na closing brace
+    }
+
+    // Common data
+    const formData = {
+        reporterEmail: form.reporterEmail.value,
+        fullname: form.fullname.value,
+        subjectName: form.subjectName.value,
+        location: form.location.value,
+        incidentType: form.incidentType.value,
+        specificViolation: form.specificViolation.value,
+        incidentDate: form.incidentDate.value,
+        time: form.time.value,
+        description: form.description.value,
+        fileName: file ? file.name : "",
+        fileType: file ? file.type : ""
+    };
 
     if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            formData.fileData = event.target.result.split(',')[1];
+            sendData(formData);
+        };
         reader.readAsDataURL(file);
     } else {
-        reader.onload({target: {result: ""}}); // Trigger kung walang file
+        formData.fileData = "";
+        sendData(formData);
     }
 });
 </script>
