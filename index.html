@@ -525,20 +525,21 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
     function sendData(data) {
     fetch(scriptURL, {
         method: 'POST',
-        // mode: 'cors' ang gamitin para makapasa ng headers
-        mode: 'no-cors', 
+        mode: 'cors', // Palitan ito mula no-cors
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     })
-    .then(() => {
+    .then(response => response.json()) // Basahin ang response
+    .then(result => {
         alert("Report Submitted Successfully!");
         location.reload();
     })
     .catch(err => {
-        console.error(err);
-        alert("Error: Paki-check ang internet o ang Script URL.");
+        console.error("Error Details:", err);
+        alert("Error: Check console for details.");
+        btn.disabled = false;
     });
 }
 
