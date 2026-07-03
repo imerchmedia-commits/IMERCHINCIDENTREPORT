@@ -332,7 +332,7 @@
 
 <script>
     // Configuration
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxHLmecVTIDuIe3WD-uldh9MaS5lLw-tJOciRlG1sVNwwAlNwOTVg0kQhhGZWlEb8rk/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyGatnU2azXkRcttv20srIkyrGQ-EdosYsfqSfW7CVLuQAx-yLb8M8g6q8ahLYyguF4/exec";
 
     // Offenses Data Object
     const offenses = {
@@ -510,7 +510,6 @@
     }
 
 // Submit Handler
-// Submit Handler
 document.getElementById('incidentForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
@@ -518,33 +517,33 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
     btn.disabled = true;
 
     const form = e.target;
-    const fileInput = form.querySelector('input[type="file"]');
-    const file = fileInput.files[0];
+    // Gamitin ang FormData para awtomatikong makuha lahat, pati file
+    const formData = new FormData(form);
 
-    // Function para ipadala ang data sa Apps Script
-function sendData(formData) { // Siguraduhin na 'formData' ang argument dito
     fetch(scriptURL, {
         method: 'POST',
-        mode: 'no-cors',
-        cache: 'no-cache',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+        // HUWAG maglagay ng 'Content-Type' header kapag FormData ang gamit
+        // para kusa itong ma-detect ng browser bilang multipart/form-data
+        body: formData 
     })
-    .then(() => {
-        console.log('Success!');
-        alert('Report submitted successfully!');
+    .then(response => response.json())
+    .then(result => {
+        if(result.status === "success") {
+            alert('Report submitted successfully!');
+            form.reset();
+        } else {
+            alert("Error: " + result.error);
+        }
         btn.disabled = false;
         btn.textContent = "Submit Report";
-        form.reset();
     })
     .catch(error => {
         console.error('Error:', error);
-        alert("Error: May nangyaring aberya sa pag-submit. Pakisiguro na naka-deploy ang Code.gs bilang 'New Version'.");
+        alert("Error: May nangyaring aberya sa pag-submit.");
         btn.disabled = false;
         btn.textContent = "Submit Report";
-    }); 
+    });
+});
 } // Dito nagtatapos ang sendData function
 
     // Common data
