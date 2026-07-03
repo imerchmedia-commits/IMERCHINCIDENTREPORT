@@ -506,28 +506,30 @@
         }
     }
 
-// Submit Handler
+/// Submit Handler
 document.getElementById('incidentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    e.preventDefault(); // Pipigilan ang page reload
+    
     const btn = document.getElementById('submitBtn');
+    const form = e.target;
+    
     btn.textContent = "Submitting...";
     btn.disabled = true;
 
-    const form = e.target;
-    // Gamitin ang FormData para awtomatikong makuha lahat, pati file
+    // Ang FormData dito ang kukuha ng lahat ng inputs mo (pati files)
     const formData = new FormData(form);
 
     fetch(scriptURL, {
         method: 'POST',
-        // HUWAG maglagay ng 'Content-Type' header kapag FormData ang gamit
-        // para kusa itong ma-detect ng browser bilang multipart/form-data
-        body: formData 
+        body: formData // Diretsong ipapadala ang formData
     })
     .then(response => response.json())
     .then(result => {
         if(result.status === "success") {
             alert('Report submitted successfully!');
-            form.reset();
+            form.reset(); // I-clear ang form
+            // I-reset din ang dropdown
+            document.getElementById('specificViolation').innerHTML = '<option value="" disabled selected>Select Category first</option>';
         } else {
             alert("Error: " + result.error);
         }
@@ -540,6 +542,7 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
         btn.disabled = false;
         btn.textContent = "Submit Report";
     });
+});
 } // Dito nagtatapos ang sendData function
 
     // Common data
