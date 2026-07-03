@@ -502,7 +502,7 @@
 
 /// Submit Handler
 document.getElementById('incidentForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Pipigilan ang page reload
+    e.preventDefault(); 
     
     const btn = document.getElementById('submitBtn');
     const form = e.target;
@@ -510,19 +510,17 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
     btn.textContent = "Submitting...";
     btn.disabled = true;
 
-    // Ang FormData dito ang kukuha ng lahat ng inputs mo (pati files)
     const formData = new FormData(form);
 
     fetch(scriptURL, {
         method: 'POST',
-        body: formData // Diretsong ipapadala ang formData
+        body: formData
     })
     .then(response => response.json())
     .then(result => {
         if(result.status === "success") {
             alert('Report submitted successfully!');
-            form.reset(); // I-clear ang form
-            // I-reset din ang dropdown
+            form.reset();
             document.getElementById('specificViolation').innerHTML = '<option value="" disabled selected>Select Category first</option>';
         } else {
             alert("Error: " + result.error);
@@ -536,34 +534,6 @@ document.getElementById('incidentForm').addEventListener('submit', function(e) {
         btn.disabled = false;
         btn.textContent = "Submit Report";
     });
-});
-} // Dito nagtatapos ang sendData function
-
-    // Common data
-    const formData = {
-    reporterName: form.fullname.value,
-    reporterEmail: form.reporterEmail.value,
-    subjectName: form.subjectName.value,
-    location: form.location.value,
-    incidentType: form.incidentType.value,
-    specificViolation: form.specificViolation.value,
-    incidentDate: form.incidentDate.value,
-    time: form.time.value,
-    description: form.description.value
-};
-// I-pass ang formData na ito sa iyong sendData function
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            formData.fileData = event.target.result.split(',')[1];
-            sendData(formData);
-        };
-        reader.readAsDataURL(file);
-    } else {
-        formData.fileData = "";
-        sendData(formData);
-    }
 });
 </script>
 </body>
