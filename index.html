@@ -465,22 +465,19 @@
         ]
     };
 
-    // Helper Functions
+    // Functions
     function verifyLogin() {
-    const emailInput = document.getElementById('companyEmail');
-    const email = emailInput.value;
-    
-    if (email.endsWith('@imerchmedia.net')) {
-        document.getElementById('loginSection').classList.add('hidden');
-        document.getElementById('reportSection').classList.remove('hidden');
-        
-        // Dito natin ilalagay ang value sa hidden input sa loob ng form
-        document.getElementById('userEmailLabel').textContent = email;
-        document.getElementById('verifiedReporterEmail').value = email; 
-    } else {
-        alert("Access Denied: Only @imerchmedia.net allowed.");
+        const emailInput = document.getElementById('companyEmail');
+        const email = emailInput.value;
+        if (email.endsWith('@imerchmedia.net')) {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('reportSection').classList.remove('hidden');
+            document.getElementById('userEmailLabel').textContent = email;
+            document.getElementById('verifiedReporterEmail').value = email;
+        } else {
+            alert("Access Denied: Only @imerchmedia.net allowed.");
+        }
     }
-}
 
     function updateSpecificOffenses(cat) {
         const sel = document.getElementById('specificViolation');
