@@ -465,8 +465,8 @@
         ]
     };
 
-   // Functions
-    function verifyLogin() {
+   // Functions - Ginawa nating global gamit ang 'window.'
+    window.verifyLogin = function() {
         const emailInput = document.getElementById('companyEmail');
         const email = emailInput.value;
         if (email.endsWith('@imerchmedia.net')) {
@@ -479,7 +479,7 @@
         }
     }
 
-    function updateSpecificOffenses(cat) {
+    window.updateSpecificOffenses = function(cat) {
         const sel = document.getElementById('specificViolation');
         sel.innerHTML = '<option value="" disabled selected>Select Violation</option>';
         if (offenses[cat]) {
@@ -492,7 +492,7 @@
         }
     }
 
-    function toggleTheme() {
+    window.toggleTheme = function() {
         const body = document.body;
         const icon = document.getElementById('theme-icon');
         const isDark = body.getAttribute('data-theme') === 'dark';
@@ -500,41 +500,55 @@
         icon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
     }
 
-/// Submit Handler
-document.getElementById('incidentForm').addEventListener('submit', function(e) {
-    e.preventDefault(); 
-    
-    const btn = document.getElementById('submitBtn');
-    const form = e.target;
-    
-    btn.textContent = "Submitting...";
-    btn.disabled = true;
+    // Submit Handler - Dito na papasok ang File Reader logic
+    document.getElementById('incidentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const fileInput = document.querySelector('input[type="file"]');
+        const file = fileInput.files[0];
 
-    const formData = new FormData(form);
+        btn.textContent = "Uploading...";
+        btn.disabled = true;
 
-    fetch(scriptURL, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(result => {
-        if(result.status === "success") {
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = {
+                    filename: file.name,
+                    mimeType: file.type,
+                    content: e.target.result.split(',')[1] // Base64 data
+                };
+                sendToAppsScript(data);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            sendToAppsScript(null);
+        }
+    });
+
+    function sendToAppsScript(fileData) {
+        const form = document.getElementById('incidentForm');
+        const formData = new FormData(form);
+        
+        if (fileData) {
+            formData.append('file', JSON.stringify(fileData));
+        }
+
+        fetch(scriptURL, { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(result => {
             alert('Report submitted successfully!');
             form.reset();
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('submitBtn').textContent = "Submit Report";
             document.getElementById('specificViolation').innerHTML = '<option value="" disabled selected>Select Category first</option>';
-        } else {
-            alert("Error: " + result.error);
-        }
-        btn.disabled = false;
-        btn.textContent = "Submit Report";
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert("Error: May nangyaring aberya sa pag-submit.");
-        btn.disabled = false;
-        btn.textContent = "Submit Report";
-    });
-});
+        })
+        .catch(err => {
+            alert("Error sa pag-submit.");
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('submitBtn').textContent = "Submit Report";
+        });
+    }
 </script>
 </body>
 </html>
