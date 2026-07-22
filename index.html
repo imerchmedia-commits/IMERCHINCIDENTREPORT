@@ -195,7 +195,12 @@
         <h2>Incident Portal Login Access</h2>
         <div class="input-with-icon" style="max-width: 300px; margin: 20px auto;">
             <i class="fas fa-envelope"></i>
-            <input type="email" id="companyEmail" placeholder="Enter @imerchmedia.com or .net email">
+            <input type="email" id="companyEmail" 
+            placeholder="username@imerchmedia.com / .net"
+             pattern="[a-zA-Z0-9._%+-]+@(imerchmedia\.com|imerchmedia\.net)"
+                title="Please use your official @imerchmedia.com or @imerchmedia.net email address."
+                required 
+                >
         </div>
         <button class="btn-submit" onclick="verifyLogin()" style="max-width: 300px; margin: auto;">Login to Portal</button>
     </div>
@@ -469,13 +474,13 @@
     window.verifyLogin = function() {
         const emailInput = document.getElementById('companyEmail');
         const email = emailInput.value;
-        if (email.endsWith('@imerchmedia.net')) || email.endsWith('@imerchmedia.com')) {
+        if (email.endsWith('@imerchmedia.net') || email.endsWith('@imerchmedia.com')) {
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('reportSection').classList.remove('hidden');
             document.getElementById('userEmailLabel').textContent = email;
             document.getElementById('verifiedReporterEmail').value = email;
         } else {
-            alert("Access Denied: Only @imerchmedia.net allowed or @imerchmedia.com allowed.");
+            alert("Access Denied: Only authorized @imerchmedia.com or @imerchmedia.net emails are allowed.");
         }
     }
 
